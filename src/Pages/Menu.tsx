@@ -10,19 +10,19 @@ const Menu: React.FC = () => {
         caption: "幽蘭拿鐵",
         photoUrl: "milktea.png",
         backgroundColor: "bg-rose-50",
-        additionalLink: "1",
+        additionalLink: "../products/1",
       },
       {
         caption: "蔓越闌珊",
         photoUrl: "milktea.png",
         backgroundColor: "bg-purple-100",
-        additionalLink: "2",
+        additionalLink: "../products/2",
       },
       {
         caption: "宇治抹茶",
         photoUrl: "milktea.png",
         backgroundColor: "bg-lime-100",
-        additionalLink: "3",
+        additionalLink: "../products/3",
       },
     ],
   };

@@ -3,8 +3,8 @@ import Map from "../Components/uiComponents/Map";
 
 const Address: React.FC = () => {
   return (
-    <div className="min-h-[120rem] w-full  px-36">
-      <div className="w-full h-full bg-slate-100 p-28">
+    <div className="w-full ">
+      <div className="w-full bg-slate-100 p-28">
         <h1 className="text-5xl font-semibold pb-32">地址及營業時間</h1>
         <div className="h-[60rem] flex flex-row mb-32">
           <div className="h-full w-[30rem] min-w-[20rem] border-solid border-r">

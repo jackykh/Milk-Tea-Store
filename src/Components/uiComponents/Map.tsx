@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 const Map: React.FC<{
   className: string;
@@ -6,18 +7,17 @@ const Map: React.FC<{
   zoom: number;
 }> = (props) => {
   const { center, zoom, className } = props;
-  const mapRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (mapRef.current) {
-      const map = new google.maps.Map(mapRef.current, {
-        zoom,
-        center,
-      });
-      new google.maps.Marker({ position: center, map: map });
-    }
-  }, [center, zoom]);
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.REACT_APP_MAP_KEY as string,
+  });
 
-  return <div ref={mapRef} className={className}></div>;
+  return isLoaded ? (
+    <GoogleMap mapContainerClassName={className} center={center} zoom={zoom}>
+      <Marker position={center} />
+    </GoogleMap>
+  ) : (
+    <></>
+  );
 };
-
 export default Map;

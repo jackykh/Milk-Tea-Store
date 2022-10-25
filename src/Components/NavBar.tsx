@@ -24,7 +24,7 @@ const NavBar: React.FC<{ link: { [path: string]: string } }> = (props) => {
     );
   });
   return (
-    <nav className="h-32 w-full  shrink-0 ">
+    <nav className="h-full w-full shrink-0">
       <ul className="flex justify-center items-center h-full">{navItems}</ul>
     </nav>
   );

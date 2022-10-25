@@ -3,9 +3,11 @@ import Gallery from "../Components/uiComponents/Gallery";
 import CheckBox from "../Components/uiComponents/CheckBox";
 import NumberInput from "../Components/uiComponents/NumberInput";
 import Button from "../Components/uiComponents/Button";
+import LoadingSpinner from "../Components/uiComponents/LoadingSpinner";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../Store/redux";
+import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
+import { cartAction } from "../Store/redux/cart-Slice";
+
 const checkBoxOptions = [
   {
     id: "noIce",
@@ -64,7 +66,8 @@ const drinks = [
 ];
 
 const DetailPage: React.FC = () => {
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useAppDispatch();
 
   let { productId } = useParams();
   let navigate = useNavigate();
@@ -93,19 +96,6 @@ const DetailPage: React.FC = () => {
     }, 1000);
   });
 
-  const loading = (
-    <div className="lds-roller">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  );
-
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isLoggedIn) {
@@ -119,30 +109,33 @@ const DetailPage: React.FC = () => {
     }
 
     const milkteaOptions = e.currentTarget.elements.namedItem(
-      "milkteaOptions"
+      `${productId}_milkteaOptions`
     ) as RadioNodeList;
     const options = [];
 
     for (let i = 0; i < milkteaOptions.length; i++) {
       const option = milkteaOptions[i] as HTMLInputElement;
       if (option.checked) {
-        options.push(option.id);
+        options.push(option.value);
       }
     }
 
     const orderData = {
       id: productId,
+      name: product.name,
       options: options,
+      price: product.price,
       number: number,
+      photoUrl: "milktea.png",
     };
 
-    console.log(orderData);
+    dispatch(cartAction.addItem({ item: orderData }));
   };
 
   return (
-    <div className="h-full w-full  px-36">
+    <div className="h-full w-full">
       <div className="w-full h-full bg-slate-100 flex justify-center items-center">
-        {isLoading && loading}
+        {isLoading && <LoadingSpinner />}
         {!isLoading && (
           <div className="w-9/12 h-[50rem] flex justify-center items-center bg-white border-gray-200 border">
             <div className="flex w-[80rem]">
@@ -155,7 +148,10 @@ const DetailPage: React.FC = () => {
                 <h1 className="text-4xl">{product.name}</h1>
                 <h2 className="text-3xl">{`價錢：$${product.price}`}</h2>
                 <h3 className="w-9/12">{product.description}</h3>
-                <CheckBox options={checkBoxOptions} name="milkteaOptions" />
+                <CheckBox
+                  options={checkBoxOptions}
+                  name={`${productId}_milkteaOptions`}
+                />
                 <NumberInput id="milkteaNumber" max={10} />
                 <div className="flex [&>*]:mr-6">
                   <button type="submit" className="btn py-4 px-12">

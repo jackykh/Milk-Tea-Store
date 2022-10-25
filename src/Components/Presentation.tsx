@@ -144,7 +144,7 @@ const Presentation: React.FC<slideInfo> = (props) => {
   });
 
   return (
-    <div className="grow w-full px-36 relative overflow-hidden">
+    <div className="grow w-full relative overflow-hidden">
       <div
         ref={scrollContainerRef}
         className="w-full h-full overflow-scroll snap-y snap-mandatory flex flex-col scrollbar-hide"
