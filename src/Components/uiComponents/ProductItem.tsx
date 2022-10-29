@@ -8,12 +8,12 @@ const ProductItem: React.FC<{
   caption2?: string;
 }> = (props) => {
   return (
-    <div className="w-[30rem] h-[30rem] rounded-xl overflow-hidden group cursor-pointer relative">
+    <div className="w-[30rem] h-[30rem] rounded-xl overflow-hidden group cursor-pointer relative bg-slate-200">
       <Link to={props.id}>
         <img
-          src={`${props.img}`}
+          src={`${process.env.REACT_APP_SERVER}/${props.img}`}
           alt="product"
-          className="group-hover:blur-sm group-hover:brightness-50 transition-all object-contain object-center absolute"
+          className="w-full h-full group-hover:blur-sm group-hover:brightness-50 transition-all object-contain object-center absolute"
         />
       </Link>
       <div className="text-white text-3xl text-center translate-y-[35rem] font-bold group-hover:translate-y-[13rem] transition-all">

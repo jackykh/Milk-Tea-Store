@@ -4,7 +4,7 @@ import CheckBox from "../Components/uiComponents/CheckBox";
 import NumberInput from "../Components/uiComponents/NumberInput";
 import Button from "../Components/uiComponents/Button";
 import LoadingSpinner from "../Components/uiComponents/LoadingSpinner";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
 import { cartAction } from "../Store/redux/cart-Slice";
 
@@ -23,78 +23,59 @@ const checkBoxOptions = [
   },
 ];
 
-const drinks = [
-  {
-    id: 1,
-    name: "幽蘭拿鐵",
-    description:
-      "幽蘭拿鐵的製作方式是採用茶底+奶油+堅果。使用紅茶和碧根果製作而成。「幽蘭拿鐵」，採用進口紅茶，配以雀巢鮮奶、淡奶油和進口碧根果為原料。",
-    price: 32,
-    imgs: [
-      "../milktea.png",
-      "../milktea.png",
-      "../milktea.png",
-      "../milktea.png",
-    ],
-  },
-  {
-    id: 2,
-    name: "蔓越闌珊",
-    description:
-      "配以美國進口蔓越莓，酸酸甜甜的清爽果香融入茶韻，詮釋出清爽妙不可言的口感",
-    price: 34,
-    imgs: [
-      "../milktea.png",
-      "../milktea.png",
-      "../milktea.png",
-      "../milktea.png",
-    ],
-  },
-  {
-    id: 3,
-    name: "宇治抹茶",
-    description:
-      "宇治茶， 是日本的綠茶。茶葉主要產自京都府、奈良縣、滋賀縣、三重縣。",
-    price: 38,
-    imgs: [
-      "../milktea.png",
-      "../milktea.png",
-      "../milktea.png",
-      "../milktea.png",
-    ],
-  },
-];
-
 const DetailPage: React.FC = () => {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const group = useAppSelector((state) => state.user.group);
   const dispatch = useAppDispatch();
 
   let { productId } = useParams();
   let navigate = useNavigate();
   const [product, setProduct] = useState({
-    id: 0,
-    name: "",
+    id: "",
+    productName: "",
     description: "",
     price: 0,
-    imgs: [""],
+    photos: [""],
   });
   const [isLoading, setLoading] = useState(true);
-  let adjustedId: number;
-  if (productId) {
-    adjustedId = +productId;
-  }
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setTimeout(() => {
-      const drink = drinks.find((info) => {
-        return info.id === adjustedId;
-      });
-      if (drink) {
-        setProduct(drink);
+    const getProducts = async () => {
+      try {
+        const response = await fetch(
+          process.env.REACT_APP_SERVER +
+            `/api/products/get_product/${productId}`
+        );
+        const result = await response.json();
+        if (!response.ok) {
+          const error = new Error(result.message || "Unknown Error");
+          throw error;
+        }
+        const { _id, productName, description, price, photos } = result.product;
+        const adjustedPhotosUrl = (photos as Array<string>).map((photo) => {
+          return `${process.env.REACT_APP_SERVER}/${photo}`;
+        });
+        setProduct({
+          id: _id,
+          productName: productName,
+          description: description,
+          price: price,
+          photos: adjustedPhotosUrl,
+        });
+        setLoading(false);
+      } catch (error: any) {
+        if (error.message) {
+          setError(error.message as string);
+        } else {
+          setError("Unknown Error");
+        }
+
         setLoading(false);
       }
-    }, 1000);
-  });
+    };
+    getProducts();
+  }, [productId]);
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -122,11 +103,11 @@ const DetailPage: React.FC = () => {
 
     const orderData = {
       id: productId,
-      name: product.name,
+      name: product.productName,
       options: options,
       price: product.price,
       number: number,
-      photoUrl: "milktea.png",
+      photoUrl: product.photos[0],
     };
 
     dispatch(cartAction.addItem({ item: orderData }));
@@ -138,29 +119,46 @@ const DetailPage: React.FC = () => {
         {isLoading && <LoadingSpinner />}
         {!isLoading && (
           <div className="w-9/12 h-[50rem] flex justify-center items-center bg-white border-gray-200 border">
-            <div className="flex w-[80rem]">
-              <Gallery size={30} imgs={product.imgs} />
-              <form
-                className="flex flex-col  ml-20 [&>*]:mb-6 justify-center
+            {!error && (
+              <div className="flex w-[80rem] relative">
+                {group === "admin" && (
+                  <Link
+                    to={`../admin/edit/${product.id}`}
+                    className="absolute top-0 right-0 text-purple-900 flex flex-col items-center p-3 rounded hover:bg-slate-100"
+                  >
+                    <i className="fa-solid fa-pen-to-square text-2xl"></i>
+                    <span className="text-xl">編輯產品</span>
+                  </Link>
+                )}
+                <Gallery size={30} imgs={product.photos} />
+                <form
+                  className="flex flex-col  ml-20 [&>*]:mb-6 justify-center
           "
-                onSubmit={onSubmitHandler}
-              >
-                <h1 className="text-4xl">{product.name}</h1>
-                <h2 className="text-3xl">{`價錢：$${product.price}`}</h2>
-                <h3 className="w-9/12">{product.description}</h3>
-                <CheckBox
-                  options={checkBoxOptions}
-                  name={`${productId}_milkteaOptions`}
-                />
-                <NumberInput id="milkteaNumber" max={10} />
-                <div className="flex [&>*]:mr-6">
-                  <button type="submit" className="btn py-4 px-12">
-                    下單
-                  </button>
-                  <Button to="../menu">返回菜單</Button>
-                </div>
-              </form>
-            </div>
+                  onSubmit={onSubmitHandler}
+                >
+                  <h1 className="text-4xl">{product.productName}</h1>
+                  <h2 className="text-3xl">{`價錢：$${product.price}`}</h2>
+                  <h3 className="w-9/12">{product.description}</h3>
+                  <CheckBox
+                    options={checkBoxOptions}
+                    name={`${productId}_milkteaOptions`}
+                  />
+                  <NumberInput id="milkteaNumber" max={10} />
+                  <div className="flex [&>*]:mr-6">
+                    <button type="submit" className="btn py-4 px-12">
+                      下單
+                    </button>
+                    <Button to="../products">返回菜單</Button>
+                  </div>
+                </form>
+              </div>
+            )}
+            {error && (
+              <div className="w-[50rem] h-[30rem] flex flex-col justify-center items-center [&>*]:mb-8">
+                <i className="fa-solid fa-cart-shopping text-4xl "></i>
+                <h1 className="text-4xl font-bold">{error}</h1>
+              </div>
+            )}
           </div>
         )}
       </div>

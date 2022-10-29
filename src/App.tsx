@@ -14,15 +14,19 @@ import LogoutWrapper from "./Pages/Logout";
 import { useAppSelector, useAppDispatch } from "./Store/redux/hooks";
 import { authAction, authInfoType } from "./Store/redux/auth-Slice";
 import { userAction } from "./Store/redux/user-Slice";
+import { logoutThunk } from "./Store/redux/auth-Slice";
 import CartPage from "./Pages/CartPage";
 import Profile from "./Pages/Profile";
 import ProductList from "./Pages/ProductList";
+import AdminPage from "./Pages/Admin";
+import EditProductPage from "./Pages/EditProductPage";
+import EditPasswordPage from "./Pages/EditPasswordPage";
 
 function App() {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const NnumberOfCartItem = useAppSelector((state) => state.cart.items.length);
   const token = useAppSelector((state) => state.auth.token);
-  const userAvatar = useAppSelector((state) => state.user.avatar);
+  const { avatar, group } = useAppSelector((state) => state.user);
 
   const dispatch = useAppDispatch();
 
@@ -46,17 +50,21 @@ function App() {
           throw error;
         }
         dispatch(userAction.setUser(fetchedUserInfo));
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        alert(error.message);
       }
     };
-
     let authInfo: authInfoType;
     if (savedAuthInfo && token === "") {
       authInfo = JSON.parse(savedAuthInfo);
       const currentTime = new Date().getTime();
       if (authInfo.expirationTime > currentTime) {
         dispatch(authAction.login(authInfo));
+
+        ////定時登出
+        setTimeout(() => {
+          dispatch(logoutThunk);
+        }, authInfo.expirationTime - currentTime);
       } else {
         dispatch(authAction.logout());
       }
@@ -73,8 +81,18 @@ function App() {
     link = {
       home: "Home",
       menu: "Menu",
+      products: "Product List",
       login: "Login",
       address: "Address",
+    };
+  } else if (group === "admin") {
+    link = {
+      home: "Home",
+      menu: "Menu",
+      products: "Product List",
+      logout: "Logout",
+      address: "Address",
+      admin: "Admin",
     };
   } else {
     link = {
@@ -87,7 +105,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen px-36">
+    <div className="flex flex-col h-screen px-36 min-w-[128rem]">
       <div className="h-32 shrink-0 flex">
         <NavBar link={link} />
         {isLoggedIn && (
@@ -95,8 +113,8 @@ function App() {
             <UserIcon
               to="profile"
               photo={
-                userAvatar !== ""
-                  ? `${process.env.REACT_APP_SERVER}/${userAvatar}`
+                avatar !== ""
+                  ? `${process.env.REACT_APP_SERVER}/${avatar}`
                   : "https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png"
               }
             />
@@ -120,7 +138,10 @@ function App() {
           }
         />
         <Route path="cart" element={<CartPage />} />
+        <Route path="admin/edit/:productId" element={<EditProductPage />} />
+        <Route path="admin" element={<AdminPage />} />
         <Route path="test" element={<TestPage />} />
+        <Route path="profile/edit_password" element={<EditPasswordPage />} />
         <Route path="profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="home" replace />} />
       </Routes>

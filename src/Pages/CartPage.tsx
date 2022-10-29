@@ -2,34 +2,6 @@ import CartItem from "../Components/uiComponents/CartItem";
 import Button from "../Components/uiComponents/Button";
 import { useAppSelector } from "../Store/redux/hooks";
 
-// const items = [
-//   {
-//     productId: 1,
-//     name: "幽蘭拿鐵",
-//     price: 32,
-//     options: ["lessSweet", "moreIce"],
-//     number: 1,
-//     photoUrl: "milktea.png",
-//   },
-//   {
-//     productId: 2,
-//     name: "蔓越闌珊",
-//     price: 34,
-//     options: ["lessSweet", "noIce"],
-//     number: 1,
-//     photoUrl: "milktea.png",
-//   },
-
-//   {
-//     productId: 3,
-//     name: "宇治抹茶",
-//     price: 38,
-//     options: ["lessSweet"],
-//     number: 1,
-//     photoUrl: "milktea.png",
-//   },
-// ];
-
 const CartPage = () => {
   const items = useAppSelector((state) => state.cart.items);
 

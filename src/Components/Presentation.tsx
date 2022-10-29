@@ -51,6 +51,7 @@ const Presentation: React.FC<slideInfo> = (props) => {
       [startPoint, startPoint + 1 / slideNumber],
       [0, 1]
     );
+
     return { translateY, opacity };
   };
 
@@ -65,8 +66,8 @@ const Presentation: React.FC<slideInfo> = (props) => {
   const y = (slideIndex: number, noOpacity?: boolean) => {
     let motionStyle;
     if (noOpacity) {
-      motionStyle = adjustedUseParallax(slideIndex, slideNumber * 1100);
-      return { y: motionStyle.translateY };
+      motionStyle = adjustedUseParallax(slideIndex, slideNumber * 1000);
+      return { y: motionStyle.translateY, opacity: motionStyle.opacity };
     }
     motionStyle = adjustedUseParallax(slideIndex);
     return { y: motionStyle.translateY, opacity: motionStyle.opacity };

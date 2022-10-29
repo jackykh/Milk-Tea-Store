@@ -1,70 +1,55 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import Input from "../Components/uiComponents/Input";
-import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
-import { userAction } from "../Store/redux/user-Slice";
-import { Link } from "react-router-dom";
+import { useAppSelector } from "../Store/redux/hooks";
+import { useNavigate } from "react-router-dom";
 
-const Profile: React.FC = () => {
-  const { email, firstName, lastName, phoneNumber, avatar } = useAppSelector(
-    (state) => state.user
-  );
+const AdminPage: React.FC = () => {
   const token = useAppSelector((state) => state.auth.token);
-  const dispatch = useAppDispatch();
-  const [avatarUrl, setavatarUrl] = useState("");
+  const [preview, setPreview] = useState("");
+  const [fileNumber, setFileNumber] = useState(0);
   const fileUploadRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    setavatarUrl(`${process.env.REACT_APP_SERVER}/${avatar}`);
-  }, [avatar]);
-
-  const emailValidator = (value: string) => {
-    if (value.trim().length === 0) {
-      return "電郵不能為空";
-    }
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-      return "電郵格式錯誤";
-    }
-  };
+  const navigate = useNavigate();
 
   const isNotEmptyValidator = (formName: string, value: string) => {
-    if (value.trim().length === 0) {
+    if (value.toString().trim().length === 0) {
       return `${formName} 不能為空`;
-    }
-  };
-
-  const isPhoneValidator = (value: string) => {
-    if (!/^[23569]\d{7}$/.test(value)) {
-      return "請輸入正確電話號碼！";
     }
   };
 
   const fileOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (e.target.files && e.target.files[0]) {
+        setFileNumber(e.target.files.length);
         const reader = new FileReader();
         reader.readAsDataURL(e.target.files[0]);
         reader.onload = function (e) {
           if (reader.result) {
-            setavatarUrl(reader.result as string);
+            setPreview(reader.result as string);
           }
         };
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      alert(error.message);
     }
   };
 
-  const onSubmitHandler = async (values: any) => {
+  const onSubmitHandler = async (values: {
+    productName: string;
+    description: string;
+    engName: string;
+    price: number;
+  }) => {
     try {
       const formData = new FormData();
+      formData.append("productInfo", JSON.stringify(values));
       if (fileUploadRef.current?.files) {
-        formData.append("avatar", fileUploadRef.current.files[0]);
+        for (let i = 0; i < fileUploadRef.current.files.length; i++) {
+          formData.append("images", fileUploadRef.current.files[i]);
+        }
       }
-      const adjustedValue = { ...values, avatar };
-      formData.append("userInfo", JSON.stringify(adjustedValue));
       const response = await fetch(
-        (process.env.REACT_APP_SERVER as string) + "/api/user/change_userinfo",
+        (process.env.REACT_APP_SERVER as string) + "/admin/add_product",
         {
           method: "PUT",
           headers: {
@@ -78,7 +63,8 @@ const Profile: React.FC = () => {
         const error = new Error(result.message || "Server Error");
         throw error;
       }
-      dispatch(userAction.setUser(result.updatedUserInfo));
+      alert(result.message);
+      navigate("../products");
     } catch (error: any) {
       alert(error.message);
     }
@@ -88,39 +74,43 @@ const Profile: React.FC = () => {
     <div className="w-full bg-slate-100 py-16 px-16 flex justify-center items-center font-sans">
       <div className="w-[50rem] flex flex-col">
         <div className="pb-10 border-b  flex justify-center">
-          <h3 className="text-2xl font-medium">我的帳戶</h3>
+          <h3 className="text-2xl font-medium">新增產品</h3>
         </div>
-        <div className="p-10 flex justify-center items-center">
+        <div className="p-10 flex flex-col justify-center items-center">
           <label
-            htmlFor="avatar"
-            className="w-[15rem] h-[15rem] rounded-full overflow-hidden group cursor-pointer relative"
+            htmlFor="images"
+            className="w-[15rem] h-[15rem] rounded-full overflow-hidden group cursor-pointer relative bg-purple-300 mb-6"
           >
             <img
-              src={avatarUrl}
-              alt="avatar"
+              src={preview}
+              alt="&nbsp;"
               className="group-hover:blur-sm group-hover:brightness-50 transition-all object-contain object-center absolute"
             />
-            <figcaption className="text-white text-center translate-y-[15rem] font-bold group-hover:translate-y-[6rem] transition-all">
-              按此上傳
+            <figcaption className="text-white text-center translate-y-[15rem] font-bold group-hover:translate-y-[5rem] transition-all">
+              <div className="flex flex-col">
+                <i className="fa-solid fa-upload"></i>
+                <span>按此上傳</span>
+              </div>
             </figcaption>
           </label>
           <input
             type="file"
             className="hidden"
-            id="avatar"
-            name="avatar"
+            id="images"
+            name="images"
             accept="image/png, image/jpeg"
+            multiple
             onChange={fileOnChangeHandler}
             ref={fileUploadRef}
           />
+          <span>選擇圖片數：{fileNumber} （最大上傳數：4）</span>
         </div>
         <Formik
           initialValues={{
-            email: email || "",
-            firstName: firstName || "",
-            lastName: lastName || "",
-            phoneNumber: phoneNumber || "",
-            avatar: avatar || "",
+            productName: "",
+            description: "",
+            engName: "",
+            price: 0,
           }}
           onSubmit={(values) => {
             onSubmitHandler(values);
@@ -130,57 +120,58 @@ const Profile: React.FC = () => {
             <Form className="w-full flex flex-col justify-center items-center [&>*]:mb-8 ">
               <div className="w-full relative">
                 <Field
-                  validate={emailValidator}
-                  name="email"
-                  type="email"
-                  placeholder="電郵"
-                  as={Input}
-                />
-                {errors.email && touched.email && (
-                  <span className="absolute right-2 p-2 select-none text-red-500">
-                    {errors.email}
-                  </span>
-                )}
-              </div>
-              <div className="w-full relative">
-                <Field
-                  validate={isNotEmptyValidator.bind(null, "名")}
-                  name="firstName"
+                  validate={isNotEmptyValidator.bind(null, "產品名稱")}
+                  name="productName"
                   type="text"
-                  placeholder="名"
+                  placeholder="產品名稱"
                   as={Input}
                 />
-                {errors.firstName && touched.firstName && (
+                {errors.productName && touched.productName && (
                   <span className="absolute right-2 p-2 select-none text-red-500">
-                    {errors.firstName}
+                    {errors.productName}
                   </span>
                 )}
               </div>
               <div className="w-full relative">
                 <Field
-                  validate={isNotEmptyValidator.bind(null, "姓氏")}
-                  name="lastName"
+                  validate={isNotEmptyValidator.bind(null, "英文名稱")}
+                  name="engName"
                   type="text"
-                  placeholder="姓氏"
+                  placeholder="英文名稱"
                   as={Input}
                 />
-                {errors.lastName && touched.lastName && (
+                {errors.engName && touched.engName && (
                   <span className="absolute right-2 p-2 select-none text-red-500">
-                    {errors.lastName}
+                    {errors.engName}
                   </span>
                 )}
               </div>
               <div className="w-full relative">
                 <Field
-                  validate={isPhoneValidator}
-                  name="phoneNumber"
+                  validate={isNotEmptyValidator.bind(null, "描述")}
+                  name="description"
+                  type="text"
+                  placeholder="描述"
+                  as={Input}
+                />
+                {errors.description && touched.description && (
+                  <span className="absolute right-2 p-2 select-none text-red-500">
+                    {errors.description}
+                  </span>
+                )}
+              </div>
+
+              <div className="w-full relative">
+                <Field
+                  validate={isNotEmptyValidator.bind(null, "價錢")}
+                  name="price"
                   type="number"
-                  placeholder="電話號碼"
+                  placeholder="價錢"
                   as={Input}
                 />
-                {errors.phoneNumber && touched.phoneNumber && (
+                {errors.price && touched.price && (
                   <span className="absolute right-2 p-2 select-none text-red-500">
-                    {errors.phoneNumber}
+                    {errors.price}
                   </span>
                 )}
               </div>
@@ -188,9 +179,6 @@ const Profile: React.FC = () => {
                 <button type="submit" className="btn mr-12 py-4 px-12">
                   儲存
                 </button>
-                <Link to="edit_password" className="btn-warning py-4 px-12">
-                  更改密碼
-                </Link>
               </div>
             </Form>
           )}
@@ -200,4 +188,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default AdminPage;

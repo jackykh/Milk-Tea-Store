@@ -73,7 +73,7 @@ const CartItem: React.FC<cartItem> = (props) => {
         className="fa-regular fa-circle-xmark absolute top-4 right-4 text-4xl text-purple-900 cursor-pointer"
         onClick={deleteHandler}
       ></i>
-      <div className="w-[10rem] bg-purple-200 object-contain flex justify-center items-center mr-6">
+      <div className="w-[10rem] object-contain flex justify-center items-center mr-6">
         <img src={photoUrl} className="w-[8rem]" alt="product" />
       </div>
       <div className="flex-1 [&>*]:mb-6">

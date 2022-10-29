@@ -7,22 +7,22 @@ const Menu: React.FC = () => {
     title: "Menu",
     slides: [
       {
-        caption: "幽蘭拿鐵",
+        caption: "經典奶茶",
         photoUrl: "milktea.png",
         backgroundColor: "bg-rose-50",
-        additionalLink: "../products/1",
+        additionalLink: "../products/635a32a528d08d7ff237ecb3",
       },
       {
-        caption: "蔓越闌珊",
+        caption: "香滑奶蓋",
         photoUrl: "milktea.png",
         backgroundColor: "bg-purple-100",
-        additionalLink: "../products/2",
+        additionalLink: "../products/635a331728d08d7ff237ecb6",
       },
       {
-        caption: "宇治抹茶",
+        caption: "水果茶",
         photoUrl: "milktea.png",
         backgroundColor: "bg-lime-100",
-        additionalLink: "../products/3",
+        additionalLink: "../products/635a335428d08d7ff237ecb9",
       },
     ],
   };

@@ -19,14 +19,13 @@ const Login: React.FC = () => {
   };
 
   const passwordValidator = (value: string) => {
-    let errorMessage;
     if (value.length === 0) {
       return "密碼不能為空";
+    } else if (
+      !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(value)
+    ) {
+      return "需要8位包含數字和字母密碼";
     }
-    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(value)) {
-      errorMessage = "需要8位包含數字和字母密碼";
-    }
-    return errorMessage;
   };
 
   return (

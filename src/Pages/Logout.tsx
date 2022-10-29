@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { authAction } from "../Store/redux/auth-Slice";
+import { useAppDispatch } from "../Store/redux/hooks";
+import { logoutThunk } from "../Store/redux/auth-Slice";
 
 const LogoutWrapper: React.FC<{ children: React.ReactNode }> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(authAction.logout());
+    dispatch(logoutThunk);
   });
   return <>{props.children}</>;
 };

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "./index";
-// import { userAction } from "./user-Slice";
+import { userAction } from "./user-Slice";
 
 export interface authInfoType {
   token: string;
@@ -31,11 +31,17 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<responseType>) {
-      const currentTime = new Date().getTime();
-      const expirationTime = currentTime + 3600000;
+      const savedLoginInfo = localStorage.getItem("loginInfo");
+      let expirationTime;
+      if (savedLoginInfo && JSON.parse(savedLoginInfo).expirationTime) {
+        expirationTime = +JSON.parse(savedLoginInfo).expirationTime;
+      } else {
+        const currentTime = new Date().getTime();
+        expirationTime = new Date(currentTime + 3600000).getTime();
+      }
       state.token = action.payload.token;
       state.userId = action.payload.userId;
-      state.expirationTime = new Date(expirationTime).getTime();
+      state.expirationTime = expirationTime;
       state.isLoggedIn = true;
       localStorage.setItem("loginInfo", JSON.stringify(state));
     },
@@ -83,34 +89,19 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
         alert(result.message);
       }
       dispatch(authAction.login(result));
-
-      //////////////////////////
-
-      // const res = await fetch(
-      //   (process.env.REACT_APP_SERVER as string) + "/api/user/get_userinfo",
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       Authorization: result.token,
-      //     },
-      //   }
-      // );
-      // const fetchedUserInfo = await res.json();
-      // if (!res.ok) {
-      //   const error = new Error(result.message || "Server Error");
-      //   throw error;
-      // }
-      // dispatch(userAction.setUser(fetchedUserInfo));
-
-      /////////////////////
-    } catch (error) {
+    } catch (error: any) {
       let message = "Unknown Error";
       if (error instanceof Error) {
         message = error.message;
       }
-      console.log(message);
+      alert(message);
     }
   };
+};
+
+export const logoutThunk = (dispatch: AppDispatch) => {
+  dispatch(authAction.logout());
+  dispatch(userAction.clearUser());
 };
 
 export default authSlice;
