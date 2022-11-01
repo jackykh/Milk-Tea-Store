@@ -4,6 +4,7 @@ import { Formik, Form, Field } from "formik";
 import { useAppDispatch } from "../Store/redux/hooks";
 import { useNavigate } from "react-router-dom";
 import { LoginAction } from "../Store/redux/auth-Slice";
+import { Link } from "react-router-dom";
 
 const Login: React.FC = () => {
   const [IsSignIn, setIsSignIn] = useState(true);
@@ -91,6 +92,11 @@ const Login: React.FC = () => {
                   <button type="submit" className="btn mr-12 py-4 px-12">
                     {IsSignIn ? "登入" : "註冊"}
                   </button>
+                  {IsSignIn && (
+                    <Link to="../reset_password" className="btn py-4 px-12">
+                      忘記密碼
+                    </Link>
+                  )}
                 </div>
               </Form>
             )}

@@ -101,7 +101,7 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
 
 export const logoutThunk = (dispatch: AppDispatch) => {
   dispatch(authAction.logout());
-  dispatch(userAction.clearUser());
+  setTimeout(() => dispatch(userAction.clearUser()), 0);
 };
 
 export default authSlice;

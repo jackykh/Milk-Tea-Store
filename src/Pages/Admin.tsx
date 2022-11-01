@@ -30,7 +30,7 @@ const AdminPage: React.FC = () => {
         };
       }
     } catch (error: any) {
-      alert(error.message);
+      alert(error.message || "Unknown Error");
     }
   };
 
@@ -66,7 +66,7 @@ const AdminPage: React.FC = () => {
       alert(result.message);
       navigate("../products");
     } catch (error: any) {
-      alert(error.message);
+      alert(error.message || "Unknown Error");
     }
   };
 

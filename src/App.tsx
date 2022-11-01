@@ -21,6 +21,9 @@ import ProductList from "./Pages/ProductList";
 import AdminPage from "./Pages/Admin";
 import EditProductPage from "./Pages/EditProductPage";
 import EditPasswordPage from "./Pages/EditPasswordPage";
+import SendResetEmailPage from "./Pages/SendResetEmailPage";
+import ResetPasswordPage from "./Pages/ResetPasswordPage";
+import CheckoutPage from "./Pages/CheckoutPage";
 
 function App() {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
@@ -51,7 +54,7 @@ function App() {
         }
         dispatch(userAction.setUser(fetchedUserInfo));
       } catch (error: any) {
-        alert(error.message);
+        alert(error.message || "Unknown Error");
       }
     };
     let authInfo: authInfoType;
@@ -66,7 +69,7 @@ function App() {
           dispatch(logoutThunk);
         }, authInfo.expirationTime - currentTime);
       } else {
-        dispatch(authAction.logout());
+        dispatch(logoutThunk);
       }
     } else if (savedAuthInfo && token !== "") {
       fetchUserInfo(token);
@@ -128,6 +131,11 @@ function App() {
         <Route path="products" element={<ProductList />} />
         <Route path="menu" element={<Menu />} />
         <Route path="address" element={<Address />} />
+        <Route
+          path="reset_password/a/:passwordToken"
+          element={<ResetPasswordPage />}
+        />
+        <Route path="reset_password" element={<SendResetEmailPage />} />
         <Route path="login" element={<Login />} />
         <Route
           path="logout"
@@ -138,6 +146,7 @@ function App() {
           }
         />
         <Route path="cart" element={<CartPage />} />
+        <Route path="checkout" element={<CheckoutPage />} />
         <Route path="admin/edit/:productId" element={<EditProductPage />} />
         <Route path="admin" element={<AdminPage />} />
         <Route path="test" element={<TestPage />} />

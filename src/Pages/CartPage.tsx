@@ -1,8 +1,11 @@
 import CartItem from "../Components/uiComponents/CartItem";
-import Button from "../Components/uiComponents/Button";
-import { useAppSelector } from "../Store/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
+import { orderAction } from "../Store/redux/order.Slice";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  const navigate = useNavigate();
+  const dispacth = useAppDispatch();
   const items = useAppSelector((state) => state.cart.items);
 
   let CartItems;
@@ -21,6 +24,20 @@ const CartPage = () => {
       <h1 className="text-4xl font-bold">Your cart is empty</h1>
     </div>
   );
+
+  const submitOrderHandler = () => {
+    const adjustedOrder = items.map((item) => {
+      return {
+        productId: item.id,
+        options: item.options,
+        quantity: item.number,
+      };
+    });
+    dispacth(
+      orderAction.setOrder({ totalPrice: subTotal, orderItems: adjustedOrder })
+    );
+    navigate("../checkout");
+  };
 
   return (
     <div className="w-full bg-slate-100 py-16 px-32">
@@ -52,7 +69,9 @@ const CartPage = () => {
                 <h3 className="text-3xl font-bold">Delivery</h3>
                 <h3 className="text-3xl font-bold">$0</h3>
               </div>
-              <Button to="home">Checkout</Button>
+              <button className="btn py-4 px-12" onClick={submitOrderHandler}>
+                Check out
+              </button>
             </div>
           </>
         )}

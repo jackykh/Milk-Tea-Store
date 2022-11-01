@@ -7,6 +7,7 @@ export interface userInfoType {
   phoneNumber: string;
   group: string;
   avatar: string;
+  likeItems: string[];
 }
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   phoneNumber: "",
   group: "",
   avatar: "",
+  likeItems: [] as string[],
 };
 
 const userSlice = createSlice({
@@ -23,14 +25,37 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser(state, action: PayloadAction<userInfoType>) {
-      const { email, firstName, lastName, group, avatar, phoneNumber } =
-        action.payload;
+      const {
+        email,
+        firstName,
+        lastName,
+        group,
+        avatar,
+        phoneNumber,
+        likeItems,
+      } = action.payload;
       state.email = email;
       state.firstName = firstName;
       state.lastName = lastName;
       state.phoneNumber = phoneNumber;
       state.group = group;
+      state.likeItems = likeItems;
       state.avatar = avatar;
+    },
+    setLikeItem(
+      state,
+      action: PayloadAction<{
+        type: string;
+        selectedItemId: string;
+      }>
+    ) {
+      if (action.payload.type === "unlike") {
+        state.likeItems = state.likeItems.filter(
+          (item) => item !== action.payload.selectedItemId
+        );
+      } else if (action.payload.type === "like") {
+        state.likeItems.push(action.payload.selectedItemId);
+      }
     },
     clearUser(state) {
       state.email = "";
@@ -39,6 +64,7 @@ const userSlice = createSlice({
       state.phoneNumber = "";
       state.group = "";
       state.avatar = "";
+      state.likeItems = [];
     },
   },
 });

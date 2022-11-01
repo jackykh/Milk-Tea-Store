@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import ProductItem from "../Components/uiComponents/ProductItem";
+import Search from "../Components/uiComponents/Search";
+import LoadingSpinner from "../Components/uiComponents/LoadingSpinner";
 
 const ProductList: React.FC = () => {
   const [params] = useSearchParams();
   const page = params.get("page") || "1";
+  const [order, setOrder] = useState("likes");
   const [productsData, setProductsData] = useState<{
     totalItems: Number;
     products: Array<{
@@ -17,39 +20,53 @@ const ProductList: React.FC = () => {
     totalItems: 0,
     products: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const fetchProductsData = useCallback(async () => {
+    try {
+      const url = new URL(
+        `${process.env.REACT_APP_SERVER}/api/products/get_products`
+      );
+      url.searchParams.append("page", page);
+      url.searchParams.append("order", order);
+      if (searchRef.current?.value) {
+        url.searchParams.append("search", searchRef.current.value);
+      }
+      const response = await fetch(url);
+      const result = await response.json();
+      if (!response.ok) {
+        const error = new Error(result.message || "Unknown Error");
+        throw error;
+      }
+      setProductsData(result);
+      setIsLoading(false);
+    } catch (error: any) {
+      alert(error.message || "Unknown Error");
+    }
+  }, [order, page]);
 
   useEffect(() => {
-    const fetchProductsData = async () => {
-      try {
-        const url = new URL(
-          `${process.env.REACT_APP_SERVER}/api/products/get_products`
-        );
-        url.searchParams.append("page", page);
-        const response = await fetch(url);
-        const result = await response.json();
-        if (!response.ok) {
-          const error = new Error(result.message || "Unknown Error");
-          throw error;
-        }
-        setProductsData(result);
-      } catch (error: any) {
-        alert(error.message);
-      }
-    };
+    setIsLoading(true);
     fetchProductsData();
-  }, [page]);
+  }, [page, order, fetchProductsData]);
 
-  const productList = productsData.products.map((product) => {
-    return (
-      <ProductItem
-        key={product.id}
-        img={product.photo}
-        id={product.id}
-        caption={product.name}
-        caption2={"$" + product.price}
-      />
+  const productList =
+    productsData.totalItems === 0 ? (
+      <h1 className="text-3xl">沒有符合條件的產品</h1>
+    ) : (
+      productsData.products.map((product) => {
+        return (
+          <ProductItem
+            key={product.id}
+            img={product.photo}
+            id={product.id}
+            caption={product.name}
+            caption2={"$" + product.price}
+          />
+        );
+      })
     );
-  });
 
   const pagination = (currentPage: number) => {
     const itemsPerPage = 6;
@@ -143,15 +160,39 @@ const ProductList: React.FC = () => {
     return <div className="flex justify-center [&>*]:mr-3 ">{pageButton}</div>;
   };
 
+  const orderChangeHandler = (e: React.FormEvent<HTMLSelectElement>) => {
+    setOrder(e.currentTarget.value);
+  };
+
   return (
-    <div className="w-full bg-slate-100 p-32 flex flex-col [&>*]:mb-20">
-      <div className="pb-10 border-b flex justify-center">
-        <h3 className="text-4xl font-medium">產品列表</h3>
-      </div>
-      <div className="w-full grid grid-cols-autofit-30 grid-rows-1 gap-16">
-        {productList}
-      </div>
-      {pagination(+page)}
+    <div className="w-full bg-slate-100 p-32 flex flex-col justify-center items-center [&>*]:mb-20">
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && (
+        <>
+          <div className="pb-10 border-b flex justify-center">
+            <h3 className="text-4xl font-medium">產品列表</h3>
+          </div>
+          <div className="flex justify-end ml-auto [&>*]:mr-6">
+            <Search
+              placeholder="搜索"
+              ref={searchRef}
+              onClick={fetchProductsData}
+            />
+            <select
+              className="rounded-md p-4 text-2xl bg-white border-none outline outline-gray-200 cursor-pointer"
+              onChange={orderChangeHandler}
+              value={order}
+            >
+              <option value="likes">以讚數排序</option>
+              <option value="price">以價格排序</option>
+            </select>
+          </div>
+          <div className="w-full grid grid-cols-autofit-30 grid-rows-1 gap-16">
+            {productList}
+          </div>
+          {pagination(+page)}
+        </>
+      )}
     </div>
   );
 };

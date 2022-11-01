@@ -7,6 +7,7 @@ import LoadingSpinner from "../Components/uiComponents/LoadingSpinner";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
 import { cartAction } from "../Store/redux/cart-Slice";
+import { userAction } from "../Store/redux/user-Slice";
 
 const checkBoxOptions = [
   {
@@ -24,8 +25,9 @@ const checkBoxOptions = [
 ];
 
 const DetailPage: React.FC = () => {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
-  const group = useAppSelector((state) => state.user.group);
+  const { isLoggedIn, token } = useAppSelector((state) => state.auth);
+  const { group, likeItems } = useAppSelector((state) => state.user);
+
   const dispatch = useAppDispatch();
 
   let { productId } = useParams();
@@ -36,9 +38,12 @@ const DetailPage: React.FC = () => {
     description: "",
     price: 0,
     photos: [""],
+    likes: 0,
   });
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const isThisBeLiked = likeItems.includes(product.id);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -52,7 +57,8 @@ const DetailPage: React.FC = () => {
           const error = new Error(result.message || "Unknown Error");
           throw error;
         }
-        const { _id, productName, description, price, photos } = result.product;
+        const { _id, productName, description, price, photos, likes } =
+          result.product;
         const adjustedPhotosUrl = (photos as Array<string>).map((photo) => {
           return `${process.env.REACT_APP_SERVER}/${photo}`;
         });
@@ -62,6 +68,7 @@ const DetailPage: React.FC = () => {
           description: description,
           price: price,
           photos: adjustedPhotosUrl,
+          likes: likes,
         });
         setLoading(false);
       } catch (error: any) {
@@ -76,6 +83,45 @@ const DetailPage: React.FC = () => {
     };
     getProducts();
   }, [productId]);
+
+  const likeItemHandler = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER}/api/user/like_item`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "bearer " + token,
+          },
+          body: JSON.stringify({ productId: product.id }),
+        }
+      );
+      const result = await response.json();
+      if (!response.ok) {
+        const error = new Error(result.message || "Unknown Error");
+        throw error;
+      }
+      alert(result.message);
+      if (!isThisBeLiked) {
+        setProduct((prevState) => {
+          return { ...prevState, likes: prevState.likes + 1 };
+        });
+        dispatch(
+          userAction.setLikeItem({ type: "like", selectedItemId: product.id })
+        );
+      } else {
+        setProduct((prevState) => {
+          return { ...prevState, likes: prevState.likes - 1 };
+        });
+        dispatch(
+          userAction.setLikeItem({ type: "unlike", selectedItemId: product.id })
+        );
+      }
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -149,13 +195,27 @@ const DetailPage: React.FC = () => {
                       下單
                     </button>
                     <Button to="../products">返回菜單</Button>
+                    {isLoggedIn && (
+                      <button
+                        type="button"
+                        className="w-[8rem] flex justify-center items-center text-4xl hover:bg-slate-100 rounded"
+                        onClick={likeItemHandler}
+                      >
+                        {isThisBeLiked ? (
+                          <i className="fa-solid fa-heart mr-3 text-red-600"></i>
+                        ) : (
+                          <i className="fa-regular fa-heart mr-3 "></i>
+                        )}
+                        {product.likes}
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>
             )}
             {error && (
               <div className="w-[50rem] h-[30rem] flex flex-col justify-center items-center [&>*]:mb-8">
-                <i className="fa-solid fa-cart-shopping text-4xl "></i>
+                <i className="fa-solid fa-cart-shopping text-4xl"></i>
                 <h1 className="text-4xl font-bold">{error}</h1>
               </div>
             )}

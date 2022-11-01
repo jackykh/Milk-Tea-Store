@@ -80,7 +80,7 @@ const Profile: React.FC = () => {
       }
       dispatch(userAction.setUser(result.updatedUserInfo));
     } catch (error: any) {
-      alert(error.message);
+      alert(error.message || "Unknown Error");
     }
   };
 

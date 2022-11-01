@@ -7,7 +7,6 @@ import LoadingSpinner from "../Components/uiComponents/LoadingSpinner";
 import { useAppSelector } from "../Store/redux/hooks";
 
 const EditProductPage: React.FC = () => {
-  // return <div></div>;
   const token = useAppSelector((state) => state.auth.token);
   let { productId } = useParams();
   const [product, setProduct] = useState({
@@ -74,7 +73,7 @@ const EditProductPage: React.FC = () => {
         };
       }
     } catch (error: any) {
-      alert(error.message);
+      alert(error.message || "Unknown Error");
     }
   };
 
@@ -112,7 +111,7 @@ const EditProductPage: React.FC = () => {
       }
       console.log(result);
     } catch (error: any) {
-      alert(error.message);
+      alert(error.message || "Unknown Error");
     }
   };
 
