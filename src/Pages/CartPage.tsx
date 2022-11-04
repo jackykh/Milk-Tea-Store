@@ -2,6 +2,7 @@ import CartItem from "../Components/uiComponents/CartItem";
 import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
 import { orderAction } from "../Store/redux/order.Slice";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const CartPage = () => {
 
   let CartItems;
   CartItems = items.map((item) => {
-    return <CartItem key={`cartItem_${item.id}`} cartitem={item} />;
+    return <CartItem key={uuidv4()} cartitem={item} />;
   });
   const subTotal = items.reduce((previousValue, currentItem) => {
     return previousValue + currentItem.price * currentItem.number;
@@ -48,7 +49,7 @@ const CartPage = () => {
           <>
             <div className="w-[50rem] [&>*]:mb-6 mr-6">
               <div className="w-full bg-white p-10">
-                <h1 className="text-4xl uppercase font-bold">My Cart</h1>
+                <h1 className="text-4xl uppercase font-bold">購物車</h1>
               </div>
               {CartItems}
               <div className="w-full bg-white p-10 flex justify-end">
@@ -62,15 +63,15 @@ const CartPage = () => {
                 <h1 className="text-4xl uppercase font-bold">CheckOut</h1>
               </div>
               <div className="flex justify-between">
-                <h3 className="text-3xl font-bold">Sub-Total</h3>
+                <h3 className="text-3xl font-bold">小計</h3>
                 <h3 className="text-3xl font-bold">${subTotal}</h3>
               </div>
               <div className="flex justify-between">
-                <h3 className="text-3xl font-bold">Delivery</h3>
+                <h3 className="text-3xl font-bold">運送費</h3>
                 <h3 className="text-3xl font-bold">$0</h3>
               </div>
               <button className="btn py-4 px-12" onClick={submitOrderHandler}>
-                Check out
+                結帳
               </button>
             </div>
           </>

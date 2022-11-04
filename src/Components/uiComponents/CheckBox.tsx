@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface checkboxProps {
   options: Array<{ id: string; content: string }>;
@@ -37,15 +38,15 @@ const CheckBox: React.FC<checkboxProps> = (props) => {
 
   const checkBoxs = props.options.map((option, index) => {
     let labelClassName =
-      "border-2 p-3 bg-white peer-checked:bg-purple-900 peer-checked:text-white border-r-0 cursor-pointer";
+      "border-2 p-3 bg-white peer-checked:bg-purple-900 peer-checked:text-white cursor-pointer";
     if (index === 0) {
       labelClassName = labelClassName + " rounded-l-2xl";
     } else if (index === props.options.length - 1) {
-      labelClassName = labelClassName + " rounded-r-2xl border-r-2";
+      labelClassName = labelClassName + " rounded-r-2xl";
     }
 
     return (
-      <div key={`${props.name}_${option.id}`}>
+      <div key={uuidv4()}>
         <input
           type="checkbox"
           id={`${props.name}_${option.id}`}

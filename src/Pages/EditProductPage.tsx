@@ -178,9 +178,10 @@ const EditProductPage: React.FC = () => {
             <span>選擇圖片數：{fileNumber} （最大上傳數：4）</span>
           </div>
           <Formik
+            enableReinitialize={true}
             initialValues={{
-              description: product.description || "",
-              price: product.price || 0,
+              description: product.description,
+              price: product.price,
             }}
             onSubmit={(values) => {
               onSubmitHandler(values);

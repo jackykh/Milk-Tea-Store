@@ -6,10 +6,7 @@ import Footer from "./Components/Footer";
 import Menu from "./Pages/Menu";
 import Address from "./Pages/Address";
 import Login from "./Pages/Login";
-import TestPage from "./Pages/TestPage";
 import DetailPage from "./Pages/DetailPage";
-import CartIcon from "./Components/uiComponents/CartIcon";
-import UserIcon from "./Components/uiComponents/UserIcon";
 import LogoutWrapper from "./Pages/Logout";
 import { useAppSelector, useAppDispatch } from "./Store/redux/hooks";
 import { authAction, authInfoType } from "./Store/redux/auth-Slice";
@@ -24,18 +21,19 @@ import EditPasswordPage from "./Pages/EditPasswordPage";
 import SendResetEmailPage from "./Pages/SendResetEmailPage";
 import ResetPasswordPage from "./Pages/ResetPasswordPage";
 import CheckoutPage from "./Pages/CheckoutPage";
+import OrderListPage from "./Pages/OrderListPage";
+import UserAndCartGroup from "./Components/uiComponents/UserAndCartGroup";
 
 function App() {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
-  const NnumberOfCartItem = useAppSelector((state) => state.cart.items.length);
   const token = useAppSelector((state) => state.auth.token);
-  const { avatar, group } = useAppSelector((state) => state.user);
-
+  const group = useAppSelector((state) => state.user.group);
+  const isAdmin = group === "admin";
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const savedAuthInfo = localStorage.getItem("loginInfo");
-
+    let timer: ReturnType<typeof setTimeout>;
     const fetchUserInfo = async (token: string) => {
       try {
         const res = await fetch(
@@ -65,7 +63,7 @@ function App() {
         dispatch(authAction.login(authInfo));
 
         ////定時登出
-        setTimeout(() => {
+        timer = setTimeout(() => {
           dispatch(logoutThunk);
         }, authInfo.expirationTime - currentTime);
       } else {
@@ -74,6 +72,7 @@ function App() {
     } else if (savedAuthInfo && token !== "") {
       fetchUserInfo(token);
     }
+    return () => clearTimeout(timer);
   }, [dispatch, token]);
 
   let link: {
@@ -83,15 +82,15 @@ function App() {
   if (!isLoggedIn) {
     link = {
       home: "Home",
-      menu: "Menu",
+      menu: "Latest Products",
       products: "Product List",
       login: "Login",
       address: "Address",
     };
-  } else if (group === "admin") {
+  } else if (isAdmin) {
     link = {
       home: "Home",
-      menu: "Menu",
+      menu: "Latest Products",
       products: "Product List",
       logout: "Logout",
       address: "Address",
@@ -100,7 +99,7 @@ function App() {
   } else {
     link = {
       home: "Home",
-      menu: "Menu",
+      menu: "Latest Products",
       products: "Product List",
       logout: "Logout",
       address: "Address",
@@ -109,21 +108,9 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen px-36 min-w-[128rem]">
-      <div className="h-32 shrink-0 flex">
+      <div className="h-32 shrink-0 flex z-50">
         <NavBar link={link} />
-        {isLoggedIn && (
-          <div className="translate-x-[-100%] flex">
-            <UserIcon
-              to="profile"
-              photo={
-                avatar !== ""
-                  ? `${process.env.REACT_APP_SERVER}/${avatar}`
-                  : "https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png"
-              }
-            />
-            <CartIcon itemNumber={NnumberOfCartItem} />
-          </div>
-        )}
+        {isLoggedIn && <UserAndCartGroup />}
       </div>
       <Routes>
         <Route path="home" element={<HomePage />} />
@@ -131,27 +118,34 @@ function App() {
         <Route path="products" element={<ProductList />} />
         <Route path="menu" element={<Menu />} />
         <Route path="address" element={<Address />} />
+
         <Route
           path="reset_password/a/:passwordToken"
           element={<ResetPasswordPage />}
         />
         <Route path="reset_password" element={<SendResetEmailPage />} />
-        <Route path="login" element={<Login />} />
-        <Route
-          path="logout"
-          element={
-            <LogoutWrapper>
-              <Navigate to="home" replace />
-            </LogoutWrapper>
-          }
-        />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="checkout" element={<CheckoutPage />} />
-        <Route path="admin/edit/:productId" element={<EditProductPage />} />
-        <Route path="admin" element={<AdminPage />} />
-        <Route path="test" element={<TestPage />} />
-        <Route path="profile/edit_password" element={<EditPasswordPage />} />
-        <Route path="profile" element={<Profile />} />
+        {!isLoggedIn && <Route path="login" element={<Login />} />}
+        {isLoggedIn && (
+          <Route
+            path="logout"
+            element={
+              <LogoutWrapper>
+                <Navigate to="home" replace />
+              </LogoutWrapper>
+            }
+          />
+        )}
+        {isLoggedIn && <Route path="cart" element={<CartPage />} />}
+        {isLoggedIn && <Route path="checkout" element={<CheckoutPage />} />}
+        {isAdmin && (
+          <Route path="admin/edit/:productId" element={<EditProductPage />} />
+        )}
+        {isAdmin && <Route path="admin" element={<AdminPage />} />}
+        {isLoggedIn && <Route path="myorder" element={<OrderListPage />} />}
+        {isLoggedIn && (
+          <Route path="profile/edit_password" element={<EditPasswordPage />} />
+        )}
+        {isLoggedIn && <Route path="profile" element={<Profile />} />}
         <Route path="*" element={<Navigate to="home" replace />} />
       </Routes>
       <Footer />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRef } from "react";
 import {
   motion,
@@ -8,6 +8,7 @@ import {
   MotionValue,
 } from "framer-motion";
 import Button from "./uiComponents/Button";
+import { v4 as uuidv4 } from "uuid";
 
 type slideInfo = {
   slideInfo: {
@@ -24,9 +25,8 @@ type slideInfo = {
 
 const Presentation: React.FC<slideInfo> = (props) => {
   const scrollContainerRef = useRef(null);
-  const [isOnLastSlide, setisOnLastSlide] = useState(false);
-
   const { scrollYProgress } = useScroll({ container: scrollContainerRef });
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -73,27 +73,6 @@ const Presentation: React.FC<slideInfo> = (props) => {
     return { y: motionStyle.translateY, opacity: motionStyle.opacity };
   };
 
-  const onScrollHandler = () => {
-    if (scrollYProgress.get() > 0.99) {
-      setisOnLastSlide(true);
-    } else {
-      setisOnLastSlide(false);
-    }
-  };
-
-  const scrollArrowAnimationVariant = {
-    y: [0, 5],
-    x: 0,
-    transition: {
-      y: {
-        repeat: Infinity,
-        repeatType: "reverse",
-        duration: 1,
-        ease: "easeOut",
-      },
-    },
-  };
-
   const Slides = props.slideInfo.slides.map((info, index) => {
     let photo = (
       <motion.img
@@ -120,8 +99,8 @@ const Presentation: React.FC<slideInfo> = (props) => {
     if (index % 2 === 0) {
       content = (
         <div
-          key={index}
-          className={`w-full h-full shrink-0 snap-center snap-always ${info.backgroundColor} flex justify-around items-center snap-alway`}
+          key={uuidv4()}
+          className={`w-full h-full shrink-0 snap-center ${info.backgroundColor} flex justify-around items-center `}
         >
           {caption}
           {photo}
@@ -130,8 +109,8 @@ const Presentation: React.FC<slideInfo> = (props) => {
     } else {
       content = (
         <div
-          key={index}
-          className={`w-full h-full shrink-0 snap-center snap-always ${info.backgroundColor} flex justify-around items-center snap-alway`}
+          key={uuidv4()}
+          className={`w-full h-full shrink-0 snap-center ${info.backgroundColor} flex justify-around items-center `}
         >
           <div className="w-5/6 h-4/6 flex justify-around items-center">
             {photo}
@@ -149,26 +128,15 @@ const Presentation: React.FC<slideInfo> = (props) => {
       <div
         ref={scrollContainerRef}
         className="w-full h-full overflow-scroll snap-y snap-mandatory flex flex-col scrollbar-hide"
-        onScroll={onScrollHandler}
       >
-        <div className="w-full h-full shrink-0 snap-center snap-always bg-purple-100  flex justify-center items-center">
+        <div className="w-full h-full shrink-0 snap-center bg-purple-100  flex justify-center items-center">
           <h1 className="text-8xl font-['Anton']">{props.slideInfo.title}</h1>
         </div>
         {Slides}
       </div>
       <div className="h-14 sticky bottom-12 text-center">
         <h3>scroll to discover</h3>
-        {isOnLastSlide ? (
-          <motion.i
-            className="fa-solid fa-arrow-up"
-            animate={scrollArrowAnimationVariant}
-          ></motion.i>
-        ) : (
-          <motion.i
-            className="fa-solid fa-arrow-down"
-            animate={scrollArrowAnimationVariant}
-          ></motion.i>
-        )}
+        <i className="fa-solid fa-arrow-down"></i>
       </div>
       <div className="h-2 sticky bottom-0 bg-slate-200">
         <motion.div

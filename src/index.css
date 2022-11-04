@@ -31,6 +31,12 @@ body {
   transform: translate(-50%, -50%);
 }
 
+@layer utilities {
+  .triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+}
+
 .btn {
   @apply no-underline border-none cursor-pointer text-white font-normal text-center bg-purple-700 rounded-[100px] transition-all hover:bg-purple-900 hover:scale-105 outline-none;
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { useAppDispatch } from "../../Store/redux/hooks";
 import { cartAction } from "../../Store/redux/cart-Slice";
 import CheckBox from "./CheckBox";
+import { v4 as uuidv4 } from "uuid";
 
 interface cartItem {
   cartitem: {
@@ -45,7 +46,7 @@ const CartItem: React.FC<cartItem> = (props) => {
     let options: React.ReactElement[] = [];
     for (let i = 1; i <= maxNumber; i++) {
       options.push(
-        <option key={i} value={i}>
+        <option key={uuidv4()} value={i}>
           {i}
         </option>
       );

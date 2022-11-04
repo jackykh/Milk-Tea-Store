@@ -4,7 +4,7 @@ import Presentation from "../Components/Presentation";
 
 const Menu: React.FC = () => {
   const slideInfo = {
-    title: "Menu",
+    title: "Latest Products",
     slides: [
       {
         caption: "經典奶茶",

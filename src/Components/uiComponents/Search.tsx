@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 
-interface searchType {
+interface searchPropsType {
   placeholder: string;
   onClick?: () => void;
 }
 
-const Search = forwardRef<HTMLInputElement, searchType>((props, ref) => {
+const Search = forwardRef<HTMLInputElement, searchPropsType>((props, ref) => {
   return (
     <div className="w-[35rem] flex">
       <input

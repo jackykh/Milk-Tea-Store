@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const Gallery: React.FC<{ size: number; imgs: string[] }> = (props) => {
   const { size, imgs } = props;
@@ -10,7 +11,7 @@ const Gallery: React.FC<{ size: number; imgs: string[] }> = (props) => {
   const imgList = imgs.map((img, index) => {
     return (
       <div
-        key={index}
+        key={uuidv4()}
         className="w-full h-full p-8 bg-slate-50 shrink-0 flex justify-center items-center"
       >
         <img src={img} alt="tea" className="object-contain" />
@@ -21,7 +22,7 @@ const Gallery: React.FC<{ size: number; imgs: string[] }> = (props) => {
   const indexDots = imgs.map((img, index) => {
     return (
       <button
-        key={index}
+        key={uuidv4()}
         className={`w-3 h-3 rounded-full border-none cursor-pointer mr-2 last:mr-0 ${
           indexOfCurrentImg === index ? "bg-slate-200" : "bg-slate-400"
         }`}

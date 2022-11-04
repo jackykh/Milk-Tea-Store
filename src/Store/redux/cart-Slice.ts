@@ -62,6 +62,9 @@ const cartSlice = createSlice({
       });
       state.items.splice(index, 1);
     },
+    clearAllItems(state) {
+      state.items = [];
+    },
   },
 });
 

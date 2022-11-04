@@ -115,12 +115,13 @@ const Profile: React.FC = () => {
           />
         </div>
         <Formik
+          enableReinitialize={true}
           initialValues={{
-            email: email || "",
-            firstName: firstName || "",
-            lastName: lastName || "",
-            phoneNumber: phoneNumber || "",
-            avatar: avatar || "",
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            phoneNumber: phoneNumber,
+            avatar: avatar,
           }}
           onSubmit={(values) => {
             onSubmitHandler(values);
