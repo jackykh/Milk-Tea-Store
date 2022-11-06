@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../Store/redux/hooks";
-import { Formik, Form } from "formik";
+import { Formik, Form, FormikProps } from "formik";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { cartAction } from "../Store/redux/cart-Slice";
@@ -84,9 +84,11 @@ const CheckoutPage: React.FC = () => {
       dispatch(cartAction.clearAllItems());
       setIsLoading(false);
       navigate("../home");
-    } catch (error: any) {
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
       setIsLoading(false);
-      alert(error.message);
     }
   };
 
@@ -100,7 +102,7 @@ const CheckoutPage: React.FC = () => {
           }}
           validationSchema={getSchema}
         >
-          {(props) => (
+          {(props: FormikProps<creditCardFormType>) => (
             <Form>
               <div className=" w-full flex justify-center items-start">
                 <div className="w-[50rem] [&>*]:mb-6 mr-6">
@@ -120,7 +122,7 @@ const CheckoutPage: React.FC = () => {
                     />
                     {props.errors.address && props.touched.address && (
                       <span className="absolute right-12 p-2 select-none text-red-500">
-                        {props.errors.address}
+                        {props.errors.address as string}
                       </span>
                     )}
                   </div>

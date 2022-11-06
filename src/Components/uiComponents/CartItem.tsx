@@ -43,7 +43,7 @@ const CartItem: React.FC<cartItem> = (props) => {
   const dispatch = useAppDispatch();
 
   const numberOptions = (maxNumber: number): React.ReactElement[] => {
-    let options: React.ReactElement[] = [];
+    const options: React.ReactElement[] = [];
     for (let i = 1; i <= maxNumber; i++) {
       options.push(
         <option key={uuidv4()} value={i}>
@@ -58,11 +58,11 @@ const CartItem: React.FC<cartItem> = (props) => {
     dispatch(cartAction.deleteItem({ id: productId }));
   };
 
-  const getCheckBoxValue = (checkedOptions: string[]) => {
+  const getCheckBoxValue = (checkedOptions: string) => {
     dispatch(cartAction.changeOptions({ id: productId, checkedOptions }));
   };
 
-  const numberChangeHandler = (event: React.ChangeEvent<{ value: any }>) => {
+  const numberChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(
       cartAction.changeNumber({ id: productId, number: +event.target.value })
     );

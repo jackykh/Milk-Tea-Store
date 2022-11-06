@@ -1,6 +1,8 @@
 import React from "react";
 
-const Input: React.FC<{ [props: string]: any }> = (props) => {
+const Input: React.FC<{ [props: string]: string | boolean | number }> = (
+  props
+) => {
   if ("className" in props) {
     return <input type="text" {...props} />;
   }

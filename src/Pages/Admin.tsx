@@ -23,14 +23,14 @@ const AdminPage: React.FC = () => {
         setFileNumber(e.target.files.length);
         const reader = new FileReader();
         reader.readAsDataURL(e.target.files[0]);
-        reader.onload = function (e) {
+        reader.onload = function () {
           if (reader.result) {
             setPreview(reader.result as string);
           }
         };
       }
-    } catch (error: any) {
-      alert(error.message || "Unknown Error");
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 
@@ -65,8 +65,8 @@ const AdminPage: React.FC = () => {
       }
       alert(result.message);
       navigate("../products");
-    } catch (error: any) {
-      alert(error.message || "Unknown Error");
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 

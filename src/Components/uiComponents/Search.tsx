@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 
 interface searchPropsType {
   placeholder: string;
@@ -20,5 +20,7 @@ const Search = forwardRef<HTMLInputElement, searchPropsType>((props, ref) => {
     </div>
   );
 });
+
+Search.displayName = "Search";
 
 export default Search;

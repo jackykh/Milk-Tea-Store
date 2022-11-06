@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import NavBar from "./Components/NavBar";
 import HomePage from "./Pages/HomePage";
@@ -24,7 +24,7 @@ import CheckoutPage from "./Pages/CheckoutPage";
 import OrderListPage from "./Pages/OrderListPage";
 import UserAndCartGroup from "./Components/uiComponents/UserAndCartGroup";
 
-function App() {
+const App: React.FC = () => {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const token = useAppSelector((state) => state.auth.token);
   const group = useAppSelector((state) => state.user.group);
@@ -51,8 +51,8 @@ function App() {
           throw error;
         }
         dispatch(userAction.setUser(fetchedUserInfo));
-      } catch (error: any) {
-        alert(error.message || "Unknown Error");
+      } catch (error) {
+        if (error instanceof Error) alert(error.message || "Unknown Error");
       }
     };
     let authInfo: authInfoType;
@@ -151,6 +151,6 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 
 export default App;

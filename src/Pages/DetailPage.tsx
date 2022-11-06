@@ -30,8 +30,8 @@ const DetailPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  let { productId } = useParams();
-  let navigate = useNavigate();
+  const { productId } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState({
     id: "",
     productName: "",
@@ -71,8 +71,8 @@ const DetailPage: React.FC = () => {
           likes: likes,
         });
         setLoading(false);
-      } catch (error: any) {
-        if (error.message) {
+      } catch (error) {
+        if (error instanceof Error && error.message) {
           setError(error.message as string);
         } else {
           setError("Unknown Error");
@@ -118,8 +118,10 @@ const DetailPage: React.FC = () => {
           userAction.setLikeItem({ type: "unlike", selectedItemId: product.id })
         );
       }
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     }
   };
 

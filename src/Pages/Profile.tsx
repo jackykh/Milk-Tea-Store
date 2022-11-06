@@ -5,6 +5,14 @@ import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
 import { userAction } from "../Store/redux/user-Slice";
 import { Link } from "react-router-dom";
 
+interface profileFormType {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  avatar: string;
+}
+
 const Profile: React.FC = () => {
   const { email, firstName, lastName, phoneNumber, avatar } = useAppSelector(
     (state) => state.user
@@ -44,7 +52,7 @@ const Profile: React.FC = () => {
       if (e.target.files && e.target.files[0]) {
         const reader = new FileReader();
         reader.readAsDataURL(e.target.files[0]);
-        reader.onload = function (e) {
+        reader.onload = function () {
           if (reader.result) {
             setavatarUrl(reader.result as string);
           }
@@ -55,7 +63,7 @@ const Profile: React.FC = () => {
     }
   };
 
-  const onSubmitHandler = async (values: any) => {
+  const onSubmitHandler = async (values: profileFormType) => {
     try {
       const formData = new FormData();
       if (fileUploadRef.current?.files) {
@@ -79,8 +87,8 @@ const Profile: React.FC = () => {
         throw error;
       }
       dispatch(userAction.setUser(result.updatedUserInfo));
-    } catch (error: any) {
-      alert(error.message || "Unknown Error");
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 
@@ -117,11 +125,11 @@ const Profile: React.FC = () => {
         <Formik
           enableReinitialize={true}
           initialValues={{
-            email: email,
-            firstName: firstName,
-            lastName: lastName,
-            phoneNumber: phoneNumber,
-            avatar: avatar,
+            email: email || "",
+            firstName: firstName || "",
+            lastName: lastName || "",
+            phoneNumber: phoneNumber || "",
+            avatar: avatar || "",
           }}
           onSubmit={(values) => {
             onSubmitHandler(values);

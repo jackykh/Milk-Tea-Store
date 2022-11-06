@@ -1,5 +1,5 @@
 import { Formik, Form, Field, FormikProps } from "formik";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { useAppSelector } from "../Store/redux/hooks";
 import Input from "../Components/uiComponents/Input";
 
@@ -58,8 +58,8 @@ const EditPasswordPage: React.FC = () => {
         throw error;
       }
       alert(result.message);
-    } catch (error: any) {
-      alert(error.message || "Unknown Error");
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 

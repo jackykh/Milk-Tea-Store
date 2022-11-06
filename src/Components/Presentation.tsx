@@ -37,7 +37,7 @@ const Presentation: React.FC<slideInfo> = (props) => {
     slideNumber: number,
     value: MotionValue<number>,
     slideIndex: number,
-    distance: number = 700
+    distance = 700
   ) => {
     const startPoint = (1 / slideNumber) * slideIndex;
 
@@ -74,7 +74,7 @@ const Presentation: React.FC<slideInfo> = (props) => {
   };
 
   const Slides = props.slideInfo.slides.map((info, index) => {
-    let photo = (
+    const photo = (
       <motion.img
         className="max-h-[50rem] max-w-[50rem]"
         style={y(index, true)}
@@ -83,7 +83,7 @@ const Presentation: React.FC<slideInfo> = (props) => {
       />
     );
 
-    let caption = (
+    const caption = (
       <motion.div style={y(index)}>
         <h1 className="text-8xl leading-normal">{info.caption}</h1>
         {info.caption2 && (

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 interface checkboxProps {
   options: Array<{ id: string; content: string }>;
   checked?: string[];
-  sendValueToFather?: Function;
+  sendValueToFather?: (value: string) => void;
   name: string;
 }
 
@@ -25,7 +25,7 @@ const CheckBox: React.FC<checkboxProps> = (props) => {
       const index = prevState.findIndex((item) => {
         return item === id;
       });
-      let adjustedCheckedItems = [...prevState];
+      const adjustedCheckedItems = [...prevState];
       if (index >= 0) {
         adjustedCheckedItems.splice(index, 1);
         return adjustedCheckedItems;

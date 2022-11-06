@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Button: React.FC<{
   children: string;
   to: string;
-  [props: string]: any;
+  [props: string]: string;
 }> = (props) => {
   return (
     <button className="btn">

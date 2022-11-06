@@ -22,4 +22,6 @@ const UserIcon = forwardRef<HTMLButtonElement, UserIconPropsType>(
   }
 );
 
+UserIcon.displayName = "UserIcon";
+
 export default UserIcon;

@@ -8,7 +8,7 @@ import { useAppSelector } from "../Store/redux/hooks";
 
 const EditProductPage: React.FC = () => {
   const token = useAppSelector((state) => state.auth.token);
-  let { productId } = useParams();
+  const { productId } = useParams();
   const [product, setProduct] = useState({
     id: "",
     productName: "",
@@ -53,8 +53,8 @@ const EditProductPage: React.FC = () => {
         });
         setPreview(`${process.env.REACT_APP_SERVER}/${photos[0]}`);
         setLoading(false);
-      } catch (error: any) {
-        setError(error.message || "Unknown Error");
+      } catch (error) {
+        if (error instanceof Error) setError(error.message || "Unknown Error");
         setLoading(false);
       }
     };
@@ -66,14 +66,14 @@ const EditProductPage: React.FC = () => {
         setFileNumber(e.target.files.length);
         const reader = new FileReader();
         reader.readAsDataURL(e.target.files[0]);
-        reader.onload = function (e) {
+        reader.onload = function () {
           if (reader.result) {
             setPreview(reader.result as string);
           }
         };
       }
-    } catch (error: any) {
-      alert(error.message || "Unknown Error");
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 
@@ -110,8 +110,8 @@ const EditProductPage: React.FC = () => {
         throw error;
       }
       console.log(result);
-    } catch (error: any) {
-      alert(error.message || "Unknown Error");
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 
@@ -135,8 +135,8 @@ const EditProductPage: React.FC = () => {
       }
       console.log(result);
       navigate("../products");
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 

@@ -1,3 +1,4 @@
+import React from "react";
 import CartItem from "../Components/uiComponents/CartItem";
 import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
 import { orderAction } from "../Store/redux/order.Slice";
@@ -9,8 +10,7 @@ const CartPage = () => {
   const dispacth = useAppDispatch();
   const items = useAppSelector((state) => state.cart.items);
 
-  let CartItems;
-  CartItems = items.map((item) => {
+  const CartItems = items.map((item) => {
     return <CartItem key={uuidv4()} cartitem={item} />;
   });
   const subTotal = items.reduce((previousValue, currentItem) => {

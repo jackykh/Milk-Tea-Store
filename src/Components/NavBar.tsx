@@ -8,7 +8,7 @@ interface navBarItemsType {
 }
 
 const NavBar: React.FC<navBarItemsType> = (props) => {
-  const navItems = Object.entries(props.link).map(([path, title], index) => {
+  const navItems = Object.entries(props.link).map(([path, title]) => {
     return (
       <li
         className="h-full text-3xl text-purple-900 mr-28 last:mr-0"

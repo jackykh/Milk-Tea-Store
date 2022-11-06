@@ -4,11 +4,11 @@ import { v4 as uuidv4 } from "uuid";
 const Gallery: React.FC<{ size: number; imgs: string[] }> = (props) => {
   const { size, imgs } = props;
   const [indexOfCurrentImg, setIndexOfCurrentImg] = useState(0);
-  let imgTransition = {
+  const imgTransition = {
     transform: `translateX(-${indexOfCurrentImg}00%`,
   };
 
-  const imgList = imgs.map((img, index) => {
+  const imgList = imgs.map((img) => {
     return (
       <div
         key={uuidv4()}

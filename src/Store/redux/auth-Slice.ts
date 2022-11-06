@@ -89,12 +89,8 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
         alert(result.message);
       }
       dispatch(authAction.login(result));
-    } catch (error: any) {
-      let message = "Unknown Error";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      alert(message);
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 };

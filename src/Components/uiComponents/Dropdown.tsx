@@ -35,7 +35,7 @@ function useCloseDropdownWhenClickedOutside(
 const Dropdown: React.FC<dropdownListType> = (props) => {
   const wrapperRef = useRef(null);
   useCloseDropdownWhenClickedOutside(wrapperRef, props.onClose);
-  const listItems = Object.entries(props.link).map(([path, title], index) => {
+  const listItems = Object.entries(props.link).map(([path, title]) => {
     return (
       <li className="mb-3" key={uuidv4()}>
         <Link to={`../${path}`} className="w-full block group">

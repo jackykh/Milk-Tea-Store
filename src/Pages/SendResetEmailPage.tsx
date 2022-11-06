@@ -30,8 +30,8 @@ const SendResetEmailPage: React.FC = () => {
         throw error;
       }
       alert(result.message);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 

@@ -1,11 +1,11 @@
-import { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { useAppSelector } from "../../Store/redux/hooks";
 import UserIcon from "./UserIcon";
 import CartIcon from "./CartIcon";
 import Dropdown from "./Dropdown";
 import { AnimatePresence } from "framer-motion";
 
-const UserAndCartGroup = () => {
+const UserAndCartGroup: React.FC = () => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const userIconRef = useRef<HTMLButtonElement>(null);
   const avatar = useAppSelector((state) => state.user.avatar);

@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../Store/redux/hooks";
 import Accordion from "../Components/uiComponents/Accordion";
 import { v4 as uuidv4 } from "uuid";
 
+type orderInfoType = Array<{
+  orderId: string;
+  orderItems: Array<{
+    productId: string;
+    productName: string;
+    price: number;
+    quantity: number;
+  }>;
+  status: string;
+  totalPrice: number;
+}>;
+
 const OrderListPage: React.FC = () => {
   const token = useAppSelector((state) => state.auth.token);
-  const [orderInfo, setOrderInfo] = useState<
-    Array<{
-      orderId: string;
-      orderItems: Array<{
-        productId: string;
-        productName: string;
-        price: number;
-        quantity: number;
-      }>;
-      status: string;
-      totalPrice: number;
-    }>
-  >([]);
+  const [orderInfo, setOrderInfo] = useState<orderInfoType>([]);
   const [showFullOrderList, setShowFullOrderList] = useState(true);
 
   useEffect(() => {
@@ -56,8 +56,8 @@ const OrderListPage: React.FC = () => {
           setShowFullOrderList(false);
         }
         setOrderInfo(adjustedOrderData);
-      } catch (error: any) {
-        alert(error.message);
+      } catch (error) {
+        if (error instanceof Error) alert(error.message);
         console.log(error);
       }
     };
@@ -70,7 +70,7 @@ const OrderListPage: React.FC = () => {
     const content = order.orderItems.map((item) => {
       return (
         <div key={uuidv4()} className="border-b border-dashed border-gray-400">
-          {Object.entries(item).map((props) => {
+          {Object.entries(item).map((props: [string, string | number]) => {
             return (
               <div
                 key={uuidv4()}
@@ -112,7 +112,7 @@ const OrderListPage: React.FC = () => {
         {!showFullOrderList && (
           <div
             className="absolute bottom-0 w-full h-[15rem] bg-gradient-to-t from-[rgba(241,245,249,0.9)] to-transparent hover:from-[rgba(241,245,249,0.7)] cursor-pointer"
-            onClick={() => setShowFullOrderList((prevState) => true)}
+            onClick={() => setShowFullOrderList(true)}
           >
             <button className="absolute bottom-8 right-1/2 translate-x-1/2">
               展開全部訂單

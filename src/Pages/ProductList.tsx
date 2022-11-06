@@ -10,7 +10,7 @@ const ProductList: React.FC = () => {
   const page = params.get("page") || "1";
   const [order, setOrder] = useState("likes");
   const [productsData, setProductsData] = useState<{
-    totalItems: Number;
+    totalItems: number;
     products: Array<{
       id: string;
       name: string;
@@ -42,8 +42,8 @@ const ProductList: React.FC = () => {
       }
       setProductsData(result);
       setIsLoading(false);
-    } catch (error: any) {
-      alert(error.message || "Unknown Error");
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   }, [order, page]);
 
