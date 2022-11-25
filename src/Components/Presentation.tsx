@@ -27,6 +27,8 @@ const Presentation: React.FC<slideInfo> = (props) => {
   const scrollContainerRef = useRef(null);
   const { scrollYProgress } = useScroll({ container: scrollContainerRef });
 
+  const slideNumber = props.slideInfo.slides.length;
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -52,10 +54,14 @@ const Presentation: React.FC<slideInfo> = (props) => {
       [0, 1]
     );
 
-    return { translateY, opacity };
-  };
+    const zIndex = useTransform(
+      value,
+      [startPoint, startPoint + 1 / slideNumber],
+      [-1, 10]
+    );
 
-  const slideNumber = 3;
+    return { translateY, opacity, zIndex };
+  };
 
   const adjustedUseParallax = useParallax.bind(
     null,
@@ -70,7 +76,11 @@ const Presentation: React.FC<slideInfo> = (props) => {
       return { y: motionStyle.translateY, opacity: motionStyle.opacity };
     }
     motionStyle = adjustedUseParallax(slideIndex);
-    return { y: motionStyle.translateY, opacity: motionStyle.opacity };
+    return {
+      y: motionStyle.translateY,
+      opacity: motionStyle.opacity,
+      zIndex: motionStyle.zIndex,
+    };
   };
 
   const Slides = props.slideInfo.slides.map((info, index) => {
@@ -84,7 +94,7 @@ const Presentation: React.FC<slideInfo> = (props) => {
     );
 
     const caption = (
-      <motion.div style={y(index)}>
+      <motion.div style={y(index)} className="p-10">
         <h1 className="text-8xl leading-normal">{info.caption}</h1>
         {info.caption2 && (
           <h2 className="text-4xl leading-normal">{info.caption2}</h2>
@@ -98,20 +108,14 @@ const Presentation: React.FC<slideInfo> = (props) => {
     let content;
     if (index % 2 === 0) {
       content = (
-        <div
-          key={uuidv4()}
-          className={`w-full h-full shrink-0 snap-center ${info.backgroundColor} flex justify-around items-center `}
-        >
+        <div key={uuidv4()} className={`slide ${info.backgroundColor}`}>
           {caption}
           {photo}
         </div>
       );
     } else {
       content = (
-        <div
-          key={uuidv4()}
-          className={`w-full h-full shrink-0 snap-center ${info.backgroundColor} flex justify-around items-center `}
-        >
+        <div key={uuidv4()} className={`slide ${info.backgroundColor}`}>
           <div className="w-5/6 h-4/6 flex justify-around items-center">
             {photo}
             {caption}
@@ -119,7 +123,6 @@ const Presentation: React.FC<slideInfo> = (props) => {
         </div>
       );
     }
-
     return content;
   });
 
@@ -127,9 +130,9 @@ const Presentation: React.FC<slideInfo> = (props) => {
     <div className="grow w-full relative overflow-hidden">
       <div
         ref={scrollContainerRef}
-        className="w-full h-full overflow-scroll snap-y snap-mandatory flex flex-col scrollbar-hide"
+        className="w-full h-full overflow-scroll snap-y snap-mandatory flex flex-col scrollbar-hide scroll-smooth"
       >
-        <div className="w-full h-full shrink-0 snap-center bg-purple-100  flex justify-center items-center">
+        <div className="w-full h-full shrink-0 snap-center bg-purple-100  flex justify-center items-center snap-always">
           <h1 className="text-8xl font-['Anton']">{props.slideInfo.title}</h1>
         </div>
         {Slides}

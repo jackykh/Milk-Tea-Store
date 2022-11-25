@@ -32,7 +32,7 @@ const Login: React.FC = () => {
   return (
     <div className="h-full w-full ">
       <div className="w-full h-full bg-slate-100 flex justify-center items-center">
-        <div className="w-[60rem] h-[30rem] bg-white border-gray-200 border flex flex-col justify-center items-center">
+        <div className="w-[60rem] py-10 bg-white border-gray-200 border flex flex-col justify-center items-center">
           <div className="flex justify-around pb-8 font-medium w-3/5">
             <button
               className={`${IsSignIn && "border-b-2 border-purple-900"} p-3`}
@@ -88,7 +88,14 @@ const Login: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <div className="w-[30rem]  flex justify-center items-center mt-6">
+                {!IsSignIn && (
+                  <div className="p-2 bg-gray-100 rounded">
+                    <span className="text-sm">
+                      點擊註冊即表示你了解本網站內所有商品和帳號服務均為虛構。
+                    </span>
+                  </div>
+                )}
+                <div className="w-[30rem]  flex justify-center items-center">
                   <button type="submit" className="btn mr-12 py-4 px-12">
                     {IsSignIn ? "登入" : "註冊"}
                   </button>

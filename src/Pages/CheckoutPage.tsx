@@ -215,6 +215,20 @@ const CheckoutPage: React.FC = () => {
                     <Link to="../cart" className="btn py-4 px-12">
                       <i className="fa-solid fa-rotate-left mr-3"></i>返回購物車
                     </Link>
+                    <div className="text-6xl flex justify-center [&>*]:mr-6">
+                      <i className="fa-brands fa-cc-stripe"></i>
+                      <i className="fa-brands fa-cc-visa"></i>
+                      <i className="fa-brands fa-cc-mastercard"></i>
+                    </div>
+                    <div>
+                      信用卡資訊可使用Stripe提供之
+                      <a
+                        className="underline"
+                        href="https://stripe.com/docs/testing"
+                      >
+                        測試卡號
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>

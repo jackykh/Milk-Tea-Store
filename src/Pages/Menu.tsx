@@ -10,19 +10,19 @@ const Menu: React.FC = () => {
         caption: "經典奶茶",
         photoUrl: "milktea.png",
         backgroundColor: "bg-rose-50",
-        additionalLink: "../products/635a32a528d08d7ff237ecb3",
+        additionalLink: "../products/6368b9f2185823dcc5307e13",
       },
       {
         caption: "香滑奶蓋",
         photoUrl: "milktea.png",
         backgroundColor: "bg-purple-100",
-        additionalLink: "../products/635a331728d08d7ff237ecb6",
+        additionalLink: "../products/6368d5a8185823dcc5307e31",
       },
       {
         caption: "水果茶",
         photoUrl: "milktea.png",
         backgroundColor: "bg-lime-100",
-        additionalLink: "../products/635a335428d08d7ff237ecb9",
+        additionalLink: "../products/6368d544185823dcc5307e24",
       },
     ],
   };

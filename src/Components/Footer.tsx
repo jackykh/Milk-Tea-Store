@@ -8,10 +8,7 @@ const Footer: React.FC = () => {
         <ul className="flex [&>*]:mr-4">
           <li>Github @jackiecheunq 2022</li>
           <li>
-            <Link to="home"> • Credits</Link>
-          </li>
-          <li>
-            <Link to="home">• Legals</Link>
+            <span> • All right reserved.</span>
           </li>
         </ul>
         <Link to="home">

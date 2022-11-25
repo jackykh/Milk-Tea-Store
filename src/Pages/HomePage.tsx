@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
       {
         caption: "採用紐西蘭淡奶油",
         caption2: "奶香四溢",
-        photoUrl: "Flag-New-Zealand.webp",
+        photoUrl: "NZ-New-Zealand-Flag-icon.png",
         backgroundColor: "bg-rose-50",
       },
       {

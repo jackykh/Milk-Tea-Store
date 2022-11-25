@@ -11,6 +11,7 @@ const store = configureStore({
     order: orderSlice.reducer,
     user: userSlice.reducer,
   },
+  devTools: false,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
