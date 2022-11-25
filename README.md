@@ -1,6 +1,38 @@
-# Getting Started with Create React App
+# Milk Tea Store
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+這是一個基於 Create React App 構建的個人 project 的 frontend 部分，實現了一些簡單的電子商務功能。
+
+<a href="https://milk-tea-8ddb5.web.app/home">Live Demo<a>
+
+## 使用的技術
+
+<ol>
+    <li>react</li>
+    <li>typescript</li>
+    <li>react-router v6</li>
+    <li>react-redux</li>
+    <li>formik</li>
+    <li>framer-motion</li>
+    <li>tailwindcss</li>
+</ol>
+
+## 功能
+
+<ul>
+    <li>會員註冊、登入、登出</li>
+    <li>基本表單驗證</li>
+    <li>頁面跳轉</li>
+    <li>會根據訪客的登入狀態或會員組別而展示不同的頁面或提供不同功能（如提升為管理員的帳號可新增產品）</li>
+    <li>特定時間內維持登入狀態，逾時自動登出</li>
+    <li>主頁滑動特效、下方展示滑動進度</li>
+    <li>購買產品及購物車功能</li>
+    <li>產品分頁</li>
+    <li>標記喜愛產品</li>
+    <li>上傳頭像或產品圖片，並提供圖片預覽</li>
+    <li>檢視訂單</li>
+</ul>
 
 ## Available Scripts
 
