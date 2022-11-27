@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 這是一個基於 Create React App 構建的個人 project 的 frontend 部分，實現了一些簡單的電子商務功能。
 
-<a href="https://milk-tea-8ddb5.web.app/home">Live Demo<a>
+<a href="https://milk-tea-8ddb5.web.app/home">Live Demo</a>
 
 ## 使用的技術
 
@@ -33,6 +33,18 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     <li>上傳頭像或產品圖片，並提供圖片預覽</li>
     <li>檢視訂單</li>
 </ul>
+
+## 截圖
+
+<a href="https://ibb.co/cg5qt9F"><img src="https://i.ibb.co/1vVcKNq/2022-11-27-4-09-07.png" alt="2022-11-27-4-09-07" border="0"></a>
+<a href="https://ibb.co/xfjrH9D"><img src="https://i.ibb.co/mXqP8ZG/2022-11-27-4-09-27.png" alt="2022-11-27-4-09-27" border="0"></a>
+<a href="https://ibb.co/Wyx5M8x"><img src="https://i.ibb.co/G2xp8Yx/2022-11-27-4-10-17.png" alt="2022-11-27-4-10-17" border="0"></a>
+<a href="https://ibb.co/MVpbf5T"><img src="https://i.ibb.co/6Pb28Jh/2022-11-27-4-10-50.png" alt="2022-11-27-4-10-50" border="0"></a>
+<a href="https://ibb.co/3v8jVm0"><img src="https://i.ibb.co/nBVY4MD/2022-11-27-4-11-23.png" alt="2022-11-27-4-11-23" border="0"></a>
+<a href="https://ibb.co/5xKLP1j"><img src="https://i.ibb.co/3YRcnTF/2022-11-27-4-12-02.png" alt="2022-11-27-4-12-02" border="0"></a>
+<a href="https://ibb.co/nkxGKq8"><img src="https://i.ibb.co/Qmygx7j/2022-11-27-4-44-24.png" alt="2022-11-27-4-44-24" border="0"></a>
+<a href="https://ibb.co/CKjJxCH"><img src="https://i.ibb.co/VYFHXnq/2022-11-27-4-45-02.png" alt="2022-11-27-4-45-02" border="0"></a>
+<a href="https://ibb.co/Gt0Wcsr"><img src="https://i.ibb.co/2syvg8p/2022-11-27-4-46-08.png" alt="2022-11-27-4-46-08" border="0"></a>
 
 ## Available Scripts
 
