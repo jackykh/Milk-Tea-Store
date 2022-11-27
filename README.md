@@ -36,15 +36,41 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## 截圖
 
-<a href="https://ibb.co/cg5qt9F"><img src="https://i.ibb.co/1vVcKNq/2022-11-27-4-09-07.png" alt="2022-11-27-4-09-07" border="0"></a>
-<a href="https://ibb.co/xfjrH9D"><img src="https://i.ibb.co/mXqP8ZG/2022-11-27-4-09-27.png" alt="2022-11-27-4-09-27" border="0"></a>
-<a href="https://ibb.co/Wyx5M8x"><img src="https://i.ibb.co/G2xp8Yx/2022-11-27-4-10-17.png" alt="2022-11-27-4-10-17" border="0"></a>
-<a href="https://ibb.co/MVpbf5T"><img src="https://i.ibb.co/6Pb28Jh/2022-11-27-4-10-50.png" alt="2022-11-27-4-10-50" border="0"></a>
-<a href="https://ibb.co/3v8jVm0"><img src="https://i.ibb.co/nBVY4MD/2022-11-27-4-11-23.png" alt="2022-11-27-4-11-23" border="0"></a>
-<a href="https://ibb.co/5xKLP1j"><img src="https://i.ibb.co/3YRcnTF/2022-11-27-4-12-02.png" alt="2022-11-27-4-12-02" border="0"></a>
-<a href="https://ibb.co/nkxGKq8"><img src="https://i.ibb.co/Qmygx7j/2022-11-27-4-44-24.png" alt="2022-11-27-4-44-24" border="0"></a>
-<a href="https://ibb.co/CKjJxCH"><img src="https://i.ibb.co/VYFHXnq/2022-11-27-4-45-02.png" alt="2022-11-27-4-45-02" border="0"></a>
-<a href="https://ibb.co/Gt0Wcsr"><img src="https://i.ibb.co/2syvg8p/2022-11-27-4-46-08.png" alt="2022-11-27-4-46-08" border="0"></a>
+### 主頁
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/1.png)
+
+### 登入頁面
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/4.png)
+
+### 個人資料頁面
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/5.png)
+
+### 購買頁
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/2.png)
+
+### 管理員選項和會員 Like button
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/6.png)
+
+### 產品頁，可以價錢或 like 數排列，可搜索產品
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/3.png)
+
+### 購買頁
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/7.png)
+
+### 付款頁
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/8.png)
+
+### 個人訂單紀錄
+
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/9.png)
 
 ## Available Scripts
 
