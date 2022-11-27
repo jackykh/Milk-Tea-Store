@@ -4,7 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 這是一個基於 Create React App 構建的個人 project 的 frontend 部分，實現了一些簡單的電子商務功能。
 
-<a href="https://milk-tea-8ddb5.web.app/home">Live Demo</a>
+<a href="https://github.com/jackiecheunq/milk-tea-store-backend" target="_blank" rel="noreferrer noopenner">Backend 部分(以 Node.js, Express.js, MongoDB 寫成） </a>
+
+<a href="https://milk-tea-8ddb5.web.app/home" target="_blank" rel="noreferrer noopenner">Live Demo</a>
 
 ## 使用的技術
 
