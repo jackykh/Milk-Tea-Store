@@ -32,6 +32,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     <li>標記喜愛產品</li>
     <li>上傳頭像或產品圖片，並提供圖片預覽</li>
     <li>檢視訂單</li>
+    <li>找回密碼</li>
 </ul>
 
 ## 截圖
