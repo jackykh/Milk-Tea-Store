@@ -49,7 +49,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### 個人資料頁面
 
-![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/5.png)
+![Screenshots](https://raw.githubusercontent.com/jackiecheunq/Milk-Tea-Store/main/ScreenShots/10.png)
 
 ### 購買頁
 
