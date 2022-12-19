@@ -52,6 +52,29 @@ const ProductList: React.FC = () => {
     fetchProductsData();
   }, [page, order, fetchProductsData]);
 
+  const isKeyHandled = useRef<boolean>(false);
+
+  const enterKeyDownHandler = useCallback((event: KeyboardEvent) => {
+    if (event.key !== "Enter") return;
+    fetchProductsData();
+    isKeyHandled.current = true;
+  }, []);
+
+  const enterKeyUpHandler = useCallback((event: KeyboardEvent) => {
+    if (event.key !== "Enter") return;
+    isKeyHandled.current = false;
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", enterKeyDownHandler);
+    document.addEventListener("keyup", enterKeyUpHandler);
+
+    return () => {
+      document.removeEventListener("keydown", enterKeyDownHandler);
+      document.removeEventListener("keyup", enterKeyUpHandler);
+    };
+  }, []);
+
   const productList =
     productsData.totalItems === 0 ? (
       <h1 className="text-3xl">沒有符合條件的產品</h1>
