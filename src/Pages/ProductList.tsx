@@ -3,7 +3,6 @@ import { useSearchParams, Link } from "react-router-dom";
 import ProductItem from "../Components/uiComponents/ProductItem";
 import Search from "../Components/uiComponents/Search";
 import LoadingSpinner from "../Components/uiComponents/LoadingSpinner";
-import { v4 as uuidv4 } from "uuid";
 
 const ProductList: React.FC = () => {
   const [params] = useSearchParams();
@@ -100,7 +99,7 @@ const ProductList: React.FC = () => {
       return (
         <Link
           to={`?page=${page}`}
-          key={uuidv4()}
+          key={page}
           className={`w-16 h-16 rounded-xl ${
             currentPage === page && "bg-purple-300"
           } border-slate-900 border flex justify-center items-center hover:bg-purple-300`}

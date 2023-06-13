@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 interface checkboxProps {
   options: Array<{ id: string; content: string }>;
@@ -46,7 +45,7 @@ const CheckBox: React.FC<checkboxProps> = (props) => {
     }
 
     return (
-      <div key={uuidv4()}>
+      <div key={`${props.name}_${option.id}`}>
         <input
           type="checkbox"
           id={`${props.name}_${option.id}`}

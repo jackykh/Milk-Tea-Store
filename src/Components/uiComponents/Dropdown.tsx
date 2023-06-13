@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { v4 as uuidv4 } from "uuid";
 
 interface dropdownListType {
   link: { [path: string]: string };
@@ -35,9 +34,9 @@ function useCloseDropdownWhenClickedOutside(
 const Dropdown: React.FC<dropdownListType> = (props) => {
   const wrapperRef = useRef(null);
   useCloseDropdownWhenClickedOutside(wrapperRef, props.onClose);
-  const listItems = Object.entries(props.link).map(([path, title]) => {
+  const listItems = Object.entries(props.link).map(([path, title], index) => {
     return (
-      <li className="mb-3" key={uuidv4()}>
+      <li className="mb-3" key={index}>
         <Link to={`../${path}`} className="w-full block group">
           <span className="border-b border-transparent group-hover:border-gray-400 ">
             {title}

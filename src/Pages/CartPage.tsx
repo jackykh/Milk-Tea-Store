@@ -3,7 +3,6 @@ import CartItem from "../Components/uiComponents/CartItem";
 import { useAppDispatch, useAppSelector } from "../Store/redux/hooks";
 import { orderAction } from "../Store/redux/order.Slice";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -11,7 +10,7 @@ const CartPage = () => {
   const items = useAppSelector((state) => state.cart.items);
 
   const CartItems = items.map((item) => {
-    return <CartItem key={uuidv4()} cartitem={item} />;
+    return <CartItem key={item.id} cartitem={item} />;
   });
   const subTotal = items.reduce((previousValue, currentItem) => {
     return previousValue + currentItem.price * currentItem.number;

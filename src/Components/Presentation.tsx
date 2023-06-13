@@ -8,12 +8,12 @@ import {
   MotionValue,
 } from "framer-motion";
 import Button from "./uiComponents/Button";
-import { v4 as uuidv4 } from "uuid";
 
 type slideInfo = {
   slideInfo: {
     title: string;
     slides: Array<{
+      id: string;
       caption: string;
       caption2?: string;
       additionalLink?: string;
@@ -108,14 +108,14 @@ const Presentation: React.FC<slideInfo> = (props) => {
     let content;
     if (index % 2 === 0) {
       content = (
-        <div key={uuidv4()} className={`slide ${info.backgroundColor}`}>
+        <div key={info.id} className={`slide ${info.backgroundColor}`}>
           {caption}
           {photo}
         </div>
       );
     } else {
       content = (
-        <div key={uuidv4()} className={`slide ${info.backgroundColor}`}>
+        <div key={info.id} className={`slide ${info.backgroundColor}`}>
           <div className="w-5/6 h-4/6 flex justify-around items-center">
             {photo}
             {caption}

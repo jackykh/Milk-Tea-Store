@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../Store/redux/hooks";
 import Accordion from "../Components/uiComponents/Accordion";
-import { v4 as uuidv4 } from "uuid";
 
 type orderInfoType = Array<{
   orderId: string;
@@ -69,15 +68,20 @@ const OrderListPage: React.FC = () => {
   const orderList = orderInfo.map((order) => {
     const content = order.orderItems.map((item) => {
       return (
-        <div key={uuidv4()} className="border-b border-dashed border-gray-400">
-          {Object.entries(item).map((props: [string, string | number]) => {
-            return (
-              <div
-                key={uuidv4()}
-                className="mb-2"
-              >{`${props[0]} : ${props[1]}`}</div>
-            );
-          })}
+        <div
+          key={item.productId}
+          className="border-b border-dashed border-gray-400"
+        >
+          {Object.entries(item).map(
+            (props: [string, string | number], index) => {
+              return (
+                <div
+                  key={index}
+                  className="mb-2"
+                >{`${props[0]} : ${props[1]}`}</div>
+              );
+            }
+          )}
         </div>
       );
     });
@@ -85,7 +89,7 @@ const OrderListPage: React.FC = () => {
     const footer = [
       `訂單狀態：${order.status}`,
       `總價：$${order.totalPrice}`,
-    ].map((value) => <h1 key={uuidv4()}>{value}</h1>);
+    ].map((value, index) => <h1 key={index}>{value}</h1>);
 
     return (
       <Accordion

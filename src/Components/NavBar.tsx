@@ -1,7 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import { v4 as uuidv4 } from "uuid";
 
 interface navBarItemsType {
   link: { [path: string]: string };
@@ -12,7 +11,7 @@ const NavBar: React.FC<navBarItemsType> = (props) => {
     return (
       <li
         className="h-full text-3xl text-purple-900 mr-28 last:mr-0"
-        key={uuidv4()}
+        key={path}
       >
         <NavLink to={path}>
           {({ isActive }) => (
