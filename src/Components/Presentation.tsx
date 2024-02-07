@@ -72,7 +72,7 @@ const Presentation: React.FC<slideInfo> = (props) => {
   const y = (slideIndex: number, noOpacity?: boolean) => {
     let motionStyle;
     if (noOpacity) {
-      motionStyle = adjustedUseParallax(slideIndex, slideNumber * 1000);
+      motionStyle = adjustedUseParallax(slideIndex, 1400);
       return { y: motionStyle.translateY, opacity: motionStyle.opacity };
     }
     motionStyle = adjustedUseParallax(slideIndex);
