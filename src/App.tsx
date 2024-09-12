@@ -9,9 +9,7 @@ import Login from "./Pages/Login";
 import DetailPage from "./Pages/DetailPage";
 import LogoutWrapper from "./Pages/Logout";
 import { useAppSelector, useAppDispatch } from "./Store/redux/hooks";
-import { authAction, authInfoType } from "./Store/redux/auth-Slice";
-import { userAction } from "./Store/redux/user-Slice";
-import { logoutThunk } from "./Store/redux/auth-Slice";
+import { authThunk } from "./Store/redux/auth-Slice";
 import CartPage from "./Pages/CartPage";
 import Profile from "./Pages/Profile";
 import ProductList from "./Pages/ProductList";
@@ -26,54 +24,13 @@ import UserAndCartGroup from "./Components/uiComponents/UserAndCartGroup";
 
 const App: React.FC = () => {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
-  const token = useAppSelector((state) => state.auth.token);
   const group = useAppSelector((state) => state.user.group);
   const isAdmin = group === "admin";
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const savedAuthInfo = localStorage.getItem("loginInfo");
-    let timer: ReturnType<typeof setTimeout>;
-    const fetchUserInfo = async (token: string) => {
-      try {
-        const res = await fetch(
-          (process.env.REACT_APP_SERVER as string) + "/api/user/get_userinfo",
-          {
-            method: "GET",
-            headers: {
-              Authorization: "bearer " + token,
-            },
-          }
-        );
-        const fetchedUserInfo = await res.json();
-        if (!res.ok) {
-          const error = new Error(fetchedUserInfo.message || "Server Error");
-          throw error;
-        }
-        dispatch(userAction.setUser(fetchedUserInfo));
-      } catch (error) {
-        if (error instanceof Error) alert(error.message || "Unknown Error");
-      }
-    };
-    let authInfo: authInfoType;
-    if (savedAuthInfo && token === "") {
-      authInfo = JSON.parse(savedAuthInfo);
-      const currentTime = new Date().getTime();
-      if (authInfo.expirationTime > currentTime) {
-        dispatch(authAction.login(authInfo));
-
-        ////定時登出
-        timer = setTimeout(() => {
-          dispatch(logoutThunk);
-        }, authInfo.expirationTime - currentTime);
-      } else {
-        dispatch(logoutThunk);
-      }
-    } else if (savedAuthInfo && token !== "") {
-      fetchUserInfo(token);
-    }
-    return () => clearTimeout(timer);
-  }, [dispatch, token]);
+    dispatch(authThunk);
+  }, [dispatch]);
 
   let link: {
     [page: string]: string;
