@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Create env file
+        run: |
+          touch .env
+          echo REACT_APP_SERVER="${{ secrets.REACT_APP_SERVER }}" >> .env
+          echo REACT_APP_MAP_KEY="${{ secrets.REACT_APP_MAP_KEY }}" >> .env
+          echo GENERATE_SOURCEMAP=false >> .env
+          cat .env
       - name: Install Dependencies
         run: npm install
       - name: Build
