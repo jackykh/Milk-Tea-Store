@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppDispatch } from "./index";
+import { AppDispatch, RootState } from "./index";
 import { userAction } from "./user-Slice";
 
 export interface authInfoType {
@@ -14,11 +14,6 @@ export interface loginInfoType {
   password: string;
 }
 
-export interface responseType {
-  token: string;
-  userId: string;
-}
-
 const initialState: authInfoType = {
   token: "",
   userId: "",
@@ -26,31 +21,23 @@ const initialState: authInfoType = {
   expirationTime: 0,
 };
 
+const expirationDuration = 3600000;
+
 const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
-    login(state, action: PayloadAction<responseType>) {
-      const savedLoginInfo = localStorage.getItem("loginInfo");
-      let expirationTime;
-      if (savedLoginInfo && JSON.parse(savedLoginInfo).expirationTime) {
-        expirationTime = +JSON.parse(savedLoginInfo).expirationTime;
-      } else {
-        const currentTime = new Date().getTime();
-        expirationTime = new Date(currentTime + 3600000).getTime();
-      }
+    login(state, action: PayloadAction<authInfoType>) {
       state.token = action.payload.token;
       state.userId = action.payload.userId;
-      state.expirationTime = expirationTime;
+      state.expirationTime = action.payload.expirationTime;
       state.isLoggedIn = true;
-      localStorage.setItem("loginInfo", JSON.stringify(state));
     },
     logout(state) {
       state.token = "";
       state.userId = "";
       state.expirationTime = 0;
       state.isLoggedIn = false;
-      localStorage.removeItem("loginInfo");
     },
   },
 });
@@ -67,7 +54,10 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
     path = "/auth/signup";
     method = "PUT";
   }
-  return async function LoginThunk(dispatch: AppDispatch) {
+  return async function LoginThunk(
+    dispatch: AppDispatch,
+    getState: () => RootState
+  ) {
     try {
       ////Authentication
       const response = await fetch(
@@ -88,16 +78,70 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
       if (result.message) {
         alert(result.message);
       }
-      dispatch(authAction.login(result));
+      dispatch(
+        authAction.login({
+          ...result,
+          expirationTime: Date.now() + expirationDuration,
+        })
+      );
+      setTimeout(() => {
+        dispatch(logoutThunk);
+        console.log("logout");
+      }, expirationDuration);
+      localStorage.setItem("loginInfo", JSON.stringify(getState().auth));
     } catch (error) {
       if (error instanceof Error) alert(error.message || "Unknown Error");
     }
   };
 };
 
+export const authThunk = async (dispatch: AppDispatch) => {
+  const fetchUserInfo = async (token: string) => {
+    try {
+      const res = await fetch(
+        (process.env.REACT_APP_SERVER as string) + "/api/user/get_userinfo",
+        {
+          method: "GET",
+          headers: {
+            Authorization: "bearer " + token,
+          },
+        }
+      );
+      const fetchedUserInfo = await res.json();
+      if (!res.ok) {
+        const error = new Error(fetchedUserInfo.message || "Server Error");
+        throw error;
+      }
+      return fetchedUserInfo;
+    } catch (error) {
+      if (error instanceof Error) alert(error.message || "Unknown Error");
+    }
+  };
+  const savedAuthInfo = localStorage.getItem("loginInfo");
+  if (savedAuthInfo) {
+    const authInfo = JSON.parse(savedAuthInfo);
+    const { token, expirationTime, userId, isLoggedIn } = authInfo;
+    if (token && expirationTime && userId && isLoggedIn) {
+      const userInfo = await fetchUserInfo(token);
+      if (userInfo) {
+        dispatch(authAction.login(authInfo));
+        dispatch(userAction.setUser(userInfo));
+        const newExpirationDuration = expirationTime - Date.now();
+        if (newExpirationDuration > 0) {
+          setTimeout(() => {
+            dispatch(logoutThunk);
+            console.log("logout");
+          }, newExpirationDuration);
+        }
+      }
+    }
+  }
+};
+
 export const logoutThunk = (dispatch: AppDispatch) => {
   dispatch(authAction.logout());
-  setTimeout(() => dispatch(userAction.clearUser()), 0);
+  dispatch(userAction.clearUser());
+  localStorage.setItem("loginInfo", "");
 };
 
 export default authSlice;
