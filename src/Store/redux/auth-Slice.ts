@@ -121,7 +121,8 @@ export const authThunk = async (dispatch: AppDispatch) => {
   if (savedAuthInfo) {
     const authInfo = JSON.parse(savedAuthInfo);
     const { token, expirationTime, userId, isLoggedIn } = authInfo;
-    if (token && expirationTime && userId && isLoggedIn) {
+    const currentTime = Date.now();
+    if (token && +expirationTime > currentTime && userId && isLoggedIn) {
       const userInfo = await fetchUserInfo(token);
       if (userInfo) {
         dispatch(authAction.login(authInfo));
