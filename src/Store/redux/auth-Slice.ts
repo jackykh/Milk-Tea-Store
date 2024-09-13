@@ -44,6 +44,28 @@ const authSlice = createSlice({
 
 export const authAction = authSlice.actions;
 
+const fetchUserInfo = async (token: string) => {
+  try {
+    const res = await fetch(
+      (process.env.REACT_APP_SERVER as string) + "/api/user/get_userinfo",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "bearer " + token,
+        },
+      }
+    );
+    const fetchedUserInfo = await res.json();
+    if (!res.ok) {
+      const error = new Error(fetchedUserInfo.message || "Server Error");
+      throw error;
+    }
+    return fetchedUserInfo;
+  } catch (error) {
+    if (error instanceof Error) alert(error.message || "Unknown Error");
+  }
+};
+
 export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
   let path: string;
   let method: string;
@@ -54,10 +76,7 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
     path = "/auth/signup";
     method = "PUT";
   }
-  return async function LoginThunk(
-    dispatch: AppDispatch,
-    getState: () => RootState
-  ) {
+  return async function LoginThunk(dispatch: AppDispatch) {
     try {
       ////Authentication
       const response = await fetch(
@@ -78,17 +97,19 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
       if (result.message) {
         alert(result.message);
       }
-      dispatch(
-        authAction.login({
+      const userInfo = await fetchUserInfo(result.token);
+      if (userInfo) {
+        const authInfo = {
           ...result,
           expirationTime: Date.now() + expirationDuration,
-        })
-      );
-      setTimeout(() => {
-        dispatch(logoutThunk);
-        console.log("logout");
-      }, expirationDuration);
-      localStorage.setItem("loginInfo", JSON.stringify(getState().auth));
+        };
+        dispatch(authAction.login(authInfo));
+        dispatch(userAction.setUser(userInfo));
+        setTimeout(() => {
+          dispatch(logoutThunk);
+        }, expirationDuration);
+        localStorage.setItem("loginInfo", JSON.stringify(userInfo));
+      }
     } catch (error) {
       if (error instanceof Error) alert(error.message || "Unknown Error");
     }
@@ -96,27 +117,6 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
 };
 
 export const authThunk = async (dispatch: AppDispatch) => {
-  const fetchUserInfo = async (token: string) => {
-    try {
-      const res = await fetch(
-        (process.env.REACT_APP_SERVER as string) + "/api/user/get_userinfo",
-        {
-          method: "GET",
-          headers: {
-            Authorization: "bearer " + token,
-          },
-        }
-      );
-      const fetchedUserInfo = await res.json();
-      if (!res.ok) {
-        const error = new Error(fetchedUserInfo.message || "Server Error");
-        throw error;
-      }
-      return fetchedUserInfo;
-    } catch (error) {
-      if (error instanceof Error) alert(error.message || "Unknown Error");
-    }
-  };
   const savedAuthInfo = localStorage.getItem("loginInfo");
   if (savedAuthInfo) {
     const authInfo = JSON.parse(savedAuthInfo);
@@ -131,7 +131,6 @@ export const authThunk = async (dispatch: AppDispatch) => {
         if (newExpirationDuration > 0) {
           setTimeout(() => {
             dispatch(logoutThunk);
-            console.log("logout");
           }, newExpirationDuration);
         }
       }
