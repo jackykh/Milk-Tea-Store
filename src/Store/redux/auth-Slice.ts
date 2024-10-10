@@ -102,6 +102,7 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
         const authInfo = {
           ...result,
           expirationTime: Date.now() + expirationDuration,
+          isLoggedIn: true,
         };
         dispatch(authAction.login(authInfo));
         dispatch(userAction.setUser(userInfo));
@@ -109,6 +110,7 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
           dispatch(logoutThunk);
         }, expirationDuration);
         localStorage.setItem("loginInfo", JSON.stringify(userInfo));
+        localStorage.setItem("authInfo", JSON.stringify(authInfo));
       }
     } catch (error) {
       if (error instanceof Error) alert(error.message || "Unknown Error");
@@ -117,7 +119,7 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
 };
 
 export const authThunk = async (dispatch: AppDispatch) => {
-  const savedAuthInfo = localStorage.getItem("loginInfo");
+  const savedAuthInfo = localStorage.getItem("authInfo");
   if (savedAuthInfo) {
     const authInfo = JSON.parse(savedAuthInfo);
     const { token, expirationTime, userId, isLoggedIn } = authInfo;
