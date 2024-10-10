@@ -109,7 +109,6 @@ export const LoginAction = (loginInfo: loginInfoType, isLogin: boolean) => {
         setTimeout(() => {
           dispatch(logoutThunk);
         }, expirationDuration);
-        localStorage.setItem("loginInfo", JSON.stringify(userInfo));
         localStorage.setItem("authInfo", JSON.stringify(authInfo));
       }
     } catch (error) {
@@ -143,7 +142,7 @@ export const authThunk = async (dispatch: AppDispatch) => {
 export const logoutThunk = (dispatch: AppDispatch) => {
   dispatch(authAction.logout());
   dispatch(userAction.clearUser());
-  localStorage.setItem("loginInfo", "");
+  localStorage.setItem("authInfo", "");
 };
 
 export default authSlice;
