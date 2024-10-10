@@ -11,7 +11,7 @@ const store = configureStore({
     order: orderSlice.reducer,
     user: userSlice.reducer,
   },
-  devTools: false,
+  devTools: process.env.NODE_ENV === "development",
 });
 
 export type RootState = ReturnType<typeof store.getState>;
