@@ -224,6 +224,8 @@ const CheckoutPage: React.FC = () => {
                       信用卡資訊可使用Stripe提供之
                       <a
                         className="underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         href="https://stripe.com/docs/testing"
                       >
                         測試卡號
