@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "./index";
+import { AppDispatch } from "./index";
 import { userAction } from "./user-Slice";
 
 export interface authInfoType {
