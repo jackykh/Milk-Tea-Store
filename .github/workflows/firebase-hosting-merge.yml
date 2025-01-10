@@ -15,6 +15,7 @@ jobs:
         run: |
           touch .env
           echo REACT_APP_SERVER="${{ secrets.REACT_APP_SERVER }}" >> .env
+          echo REACT_APP_IMG_SERVER="${{ secrets.REACT_IMG_SERVER }}" >> .env
           echo REACT_APP_MAP_KEY="${{ secrets.REACT_APP_MAP_KEY }}" >> .env
           echo GENERATE_SOURCEMAP=false >> .env
           cat .env

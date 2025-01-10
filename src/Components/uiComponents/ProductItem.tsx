@@ -11,7 +11,7 @@ const ProductItem: React.FC<{
     <div className="w-[30rem] h-[30rem] rounded-xl overflow-hidden group cursor-pointer relative bg-slate-200">
       <Link to={props.id}>
         <img
-          src={`${process.env.REACT_APP_SERVER}/${props.img}`}
+          src={`${process.env.REACT_APP_IMG_SERVER}/${props.img}`}
           alt="product"
           className="w-full h-full group-hover:blur-sm group-hover:brightness-50 transition-all object-contain object-center absolute"
         />

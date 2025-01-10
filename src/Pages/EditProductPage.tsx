@@ -51,7 +51,7 @@ const EditProductPage: React.FC = () => {
           description: description,
           price: price,
         });
-        setPreview(`${process.env.REACT_APP_SERVER}/${photos[0]}`);
+        setPreview(`${process.env.REACT_APP_IMG_SERVER}/${photos[0]}`);
         setLoading(false);
       } catch (error) {
         if (error instanceof Error) setError(error.message || "Unknown Error");

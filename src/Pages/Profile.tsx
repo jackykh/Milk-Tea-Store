@@ -23,7 +23,7 @@ const Profile: React.FC = () => {
   const fileUploadRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setavatarUrl(`${process.env.REACT_APP_SERVER}/${avatar}`);
+    setavatarUrl(`${process.env.REACT_APP_IMG_SERVER}/${avatar}`);
   }, [avatar]);
 
   const emailValidator = (value: string) => {

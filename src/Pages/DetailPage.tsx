@@ -60,7 +60,7 @@ const DetailPage: React.FC = () => {
         const { _id, productName, description, price, photos, likes } =
           result.product;
         const adjustedPhotosUrl = (photos as Array<string>).map((photo) => {
-          return `${process.env.REACT_APP_SERVER}/${photo}`;
+          return `${process.env.REACT_APP_IMG_SERVER}/${photo}`;
         });
         setProduct({
           id: _id,

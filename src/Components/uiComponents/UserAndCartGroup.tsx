@@ -27,7 +27,7 @@ const UserAndCartGroup: React.FC = () => {
       <UserIcon
         photo={
           avatar !== ""
-            ? `${process.env.REACT_APP_SERVER}/${avatar}`
+            ? `${process.env.REACT_APP_IMG_SERVER}/${avatar}`
             : "https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png"
         }
         onClick={userIconOnClickHandler}
