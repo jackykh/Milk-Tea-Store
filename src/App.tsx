@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, Outlet } from "react-router-dom";
 import NavBar from "./Components/NavBar";
 import HomePage from "./Pages/HomePage";
 import Footer from "./Components/Footer";
@@ -21,6 +21,10 @@ import ResetPasswordPage from "./Pages/ResetPasswordPage";
 import CheckoutPage from "./Pages/CheckoutPage";
 import OrderListPage from "./Pages/OrderListPage";
 import UserAndCartGroup from "./Components/uiComponents/UserAndCartGroup";
+
+const ProtectedRoutes: React.FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
+  return isLoggedIn ? <Outlet /> : <Navigate to="/" />;
+};
 
 const App: React.FC = () => {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
@@ -82,7 +86,7 @@ const App: React.FC = () => {
         />
         <Route path="reset_password" element={<SendResetEmailPage />} />
         {!isLoggedIn && <Route path="login" element={<Login />} />}
-        {isLoggedIn && (
+        <Route element={<ProtectedRoutes isLoggedIn={isLoggedIn} />}>
           <Route
             path="logout"
             element={
@@ -91,18 +95,16 @@ const App: React.FC = () => {
               </LogoutWrapper>
             }
           />
-        )}
-        {isLoggedIn && <Route path="cart" element={<CartPage />} />}
-        {isLoggedIn && <Route path="checkout" element={<CheckoutPage />} />}
-        {isAdmin && (
-          <Route path="admin/edit/:productId" element={<EditProductPage />} />
-        )}
-        {isAdmin && <Route path="admin" element={<AdminPage />} />}
-        {isLoggedIn && <Route path="myorder" element={<OrderListPage />} />}
-        {isLoggedIn && (
+          <Route path="cart" element={<CartPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="myorder" element={<OrderListPage />} />
           <Route path="profile/edit_password" element={<EditPasswordPage />} />
-        )}
-        {isLoggedIn && <Route path="profile" element={<Profile />} />}
+          <Route path="profile" element={<Profile />} />
+          {isAdmin && (
+            <Route path="admin/edit/:productId" element={<EditProductPage />} />
+          )}
+          {isAdmin && <Route path="admin" element={<AdminPage />} />}
+        </Route>
         <Route path="*" element={<Navigate to="home" replace />} />
       </Routes>
       <Footer />
